@@ -1,16 +1,20 @@
 <template>
-<img alt="Vue logo" src="../src/assets/vinylelogo.png"/>
+<img alt="Vinyle logo" src="../src/assets/vinylelogo.png">
   <nav>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Home</router-link><span class="nav-divide"> | </span>
     <router-link to="/about">About</router-link>
   </nav>
   <router-view/>
+  <div class="footer"><nav>
+    <a href="https://www.linkedin.com/in/ciaran-melarkey-694469194/">LinkedIn</a><span class="nav-divide"> | </span>
+    <a href="https://github.com/Ciaran98">GitHub</a>
+  </nav></div>
 </template>
 
 <style>
 body{
-  color: #cce0f3;
-  background-color: rgb(28, 29, 41);
+  color: #ffffff;
+  background-color: #252629;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -19,14 +23,15 @@ body{
   text-align: center;
   
 }
-
 nav {
   padding: 30px;
 }
-
+nav span{
+  font-size: 25px;
+}
 nav a {
   font-size: 25px;
-  color: #cce0f3;
+  color: #e6ebf0;
   text-decoration: none;
 }
 
@@ -39,7 +44,14 @@ img{
 }
 @media(max-width: 768px){
   img{
-  width: 300px;
+    width: 300px;
+  }
 }
+div.footer{
+  display: flex;
+  justify-content: center;
+  height: 100px;
+  align-items: center;
+  margin-top: 30px;
 }
 </style>
