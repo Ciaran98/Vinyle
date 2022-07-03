@@ -15,30 +15,22 @@ mongoose.connect(uri);
 const Album = mongoose.model('Album',{
     name:String,
     hints:[],
-    albumArt:Buffer
+    albumArt:String
 })
 
 // Route - Get Random Album
 app.get('/getRandom', async (req,res)=>{
     const data = await Album.findOne();
-    jimp.read(data.albumArt).then(image =>{
-        image.getBuffer(jimp.MIME_BMP,(err,imgBuffer)=>{
-            res.send({
-                image:imgBuffer,
-                name:data.name,
-                hints:[data.hints]
-            });
-        })
-        
+    res.send({
+        image:data.albumArt,
+        name:data.name,
+        hints:data.hints
     });
-
 
 });
 
 // Route - Add new album to database
 app.post('/postNewAlbum',(req,res)=>{
-    
-    let img = fs.readFileSync('C:/Users/ciara/Desktop/image.jpg',);
     const newAlbum = new Album({
         "name":req.body.name,
         "hints":[req.body.hints[0],
@@ -46,11 +38,11 @@ app.post('/postNewAlbum',(req,res)=>{
         req.body.hints[2],
         req.body.hints[3]
         ],
-        "albumArt":img
+        "albumArt":req.body.albumArt
     });
-    console.log(req.body.hints)
     newAlbum.save().then(() =>
-    console.log('Record Saved'));
+        console.log('Record Saved')
+    );
     
     res.send('True');
 })

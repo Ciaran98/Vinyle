@@ -2,21 +2,19 @@
   <div>
     <h1>Guess the album name from the artwork!</h1>
     <p>Your Score</p>
-    <ul class="scores">
-      <li>Wins: {{wins}}</li>
-      <li>Losses: {{losses}}</li>
-    </ul>
     <p>Guesses remaining: {{guessesRemaining}}</p>
-    <img src="../assets/test.jpg" alt="Album Art">
+    <div class="imageup" id="imel">
+      <canvas id="canvas" width="300" height="300"></canvas>
+    </div>
     <form>
       <input v-model="albumNameGuess">
       <button type="submit" @click="submitGuess($event)" :disabled="!albumNameGuess">Guess</button>
     </form>
     <ul class="hints" v-if="guessesRemaining <=4">
-      <li v-if="guessesRemaining <=4">Release Date: July 24 2020</li>
-      <li v-if="guessesRemaining <=3">Song Hint 1: Cardigan</li>
-      <li v-if="guessesRemaining <=2">Song Hint 2: Betty</li>
-      <li v-if="guessesRemaining <=1">Artist: Taylor Swift</li>
+      <li v-if="guessesRemaining <=4">Release Date: {{hints[0]}}</li>
+      <li v-if="guessesRemaining <=3">Song Hint 1: {{hints[1]}}</li>
+      <li v-if="guessesRemaining <=2">Song Hint 2: {{hints[2]}}</li>
+      <li v-if="guessesRemaining <=1">Artist: Taylor {{hints[3]}}</li>
     </ul>
   </div>
 </template>
@@ -35,7 +33,9 @@ export default {
       guessesRemaining:6,
       wins:0,
       losses:0,
-      hints:[]
+      hints:[],
+      imageUrl:'',
+      pixelsize:0.01
     }
   },
   methods:{
@@ -48,29 +48,33 @@ export default {
         .then(res =>{
           this.albumName = res.data.name;
           this.hints = res.data.hints[0];
+          this.imageUrl = res.data.image;
+          this.pixelateImage(this.pixelsize);
         })
         .catch(err=>{
           console.error(err);
-          })
-
-      
+          });
     },
     submitGuess(event){
       event.preventDefault();
       if(this.albumNameGuess.length == 0){
         return;
       }
-      if(this.albumName == this.albumNameGuess.toLowerCase()){
+      if(this.albumName.toLowerCase() == this.albumNameGuess.toLowerCase()){
+        this.pixelateImage(1);
         this.albumNameGuess = '';
         this.wins++;
         localStorage.setItem('wins',this.wins);
         this.guessesRemaining = 6;
       }
       else{
+        this.pixelateImage(this.pixelsize+=0.05);
         this.albumNameGuess = '';
         this.guessesRemaining-=1;
       }
       if(this.guessesRemaining == 0){
+        this.pixelsize = 0.01;
+        this.pixelateImage(this.pixelsize);
         this.albumNameGuess = '';
         this.losses++;
         localStorage.setItem('losses',this.losses);
@@ -81,6 +85,26 @@ export default {
     loadScores(){
       this.wins = localStorage.getItem('wins');
       this.losses = localStorage.getItem('losses');
+    },
+    pixelateImage(pSize){
+      let image = new Image();
+      let canvas = document.getElementById('canvas');
+          console.log(canvas.width,canvas.height);
+          let ctx = canvas.getContext('2d');
+          ctx.mozImageSmoothingEnabled = false;
+          ctx.webkitImageSmoothingEnabled = false;
+          ctx.imageSmoothingEnabled = false;
+          
+          image.onload = pixelate;
+          image.src = this.imageUrl;
+          function pixelate(){
+            let size = pSize,
+            w = canvas.width * size,
+            h = canvas.height * size;
+            ctx.drawImage(image,0,0,w,h);
+            ctx.drawImage(canvas,0,0,w,h,0,0,canvas.width,canvas.height);
+
+          }
     }
   },
   beforeMount(){
@@ -88,12 +112,17 @@ export default {
   },
   mounted(){
     this.getRandomAlbum();
+    this.pixelateImage();
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+canvas{
+  height: 600px;
+  width: 600px;
+}
 h3 {
   margin: 40px 0 0;
 }
