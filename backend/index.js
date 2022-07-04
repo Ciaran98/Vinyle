@@ -9,18 +9,22 @@ const uri = `mongodb+srv://VinyleDatabase:${conf.MongoPass}@vinylecluster.ommzx.
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit:'30mb'}));
 app.use(bodyParser.urlencoded({extended:true}));
+app.use("/albums",express.static('public'));
 const cors = require('cors');
 app.use(cors());
 mongoose.connect(uri);
 const Album = mongoose.model('Album',{
     name:String,
     hints:[],
-    albumArt:String
+    albumArt:String,
+    startDate:Number,
+    endDate:Number
 })
 
 // Route - Get Random Album
 app.get('/getRandom', async (req,res)=>{
-    const data = await Album.findOne();
+    let date = Date.now();
+    const data = await Album.findOne({$and: [{startDate:{$lte:date}},{endDate:{$gte:date}}]});
     res.send({
         image:data.albumArt,
         name:data.name,
@@ -28,7 +32,6 @@ app.get('/getRandom', async (req,res)=>{
     });
 
 });
-
 // Route - Add new album to database
 app.post('/postNewAlbum',(req,res)=>{
     const newAlbum = new Album({
@@ -38,7 +41,9 @@ app.post('/postNewAlbum',(req,res)=>{
         req.body.hints[2],
         req.body.hints[3]
         ],
-        "albumArt":req.body.albumArt
+        "albumArt":req.body.albumArt,
+        "startDate":req.body.startDate,
+        "endDate":req.body.endDate
     });
     newAlbum.save().then(() =>
         console.log('Record Saved')
