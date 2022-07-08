@@ -1,11 +1,12 @@
 <template>
   <div>
     <h1>Guess the album name from the artwork!</h1>
-    <p v-if="!lastGame[1]">Time Remaining: {{ Math.round(timerCount / 10) }}</p>
-    <p v-if="!lastGame[1]">Guesses Remaining: {{ guessesRemaining }}</p>
+    <p>Time Remaining: {{ Math.round(timerCount / 10) }}</p>
+    <p>Guesses Remaining: {{ guessesRemaining }}</p>
     <p>Stats - Wins: {{ wins }} - Losses: {{ losses }}</p>
     <p v-if="lastGame[1] == 'true'">
-      You have already completed today's Vinyle!
+      You have already completed today's Vinyle! <br />It was
+      {{ albumName }} by!
     </p>
     <div class="imageup" id="imel">
       <canvas id="canvas" width="600" height="600"></canvas>
@@ -13,13 +14,10 @@
     <form>
       <input
         v-model="albumNameGuess"
-        :disabled="guessesRemaining == 0 || correctGuess"
+        :disabled="guessesRemaining == 0"
         list="albumNames"
         id="albumInput"
       />
-      <datalist id="albumNames">
-        <option value="Evermore"></option>
-      </datalist>
       <button
         type="submit"
         @click="submitGuess($event)"
@@ -29,38 +27,31 @@
         Guess
       </button>
     </form>
-    <button @click="play()" id="start">Begin Guessing</button>
-    <button @click="pause()" id="stop">Guess</button>
-    <ul class="hints" v-if="guessesRemaining <= 4">
-      <li v-if="guessesRemaining <= 4">Release Date: {{ hints[0] }}</li>
-      <li v-if="guessesRemaining <= 3">Song Hint 1: {{ hints[1] }}</li>
-      <li v-if="guessesRemaining <= 2">Song Hint 2: {{ hints[2] }}</li>
-      <li v-if="guessesRemaining <= 1">Artist: Taylor {{ hints[3] }}</li>
-    </ul>
+    <button @click="play()" id="start">Start</button>
+    <button @click="pause()" id="stop">Stop</button>
   </div>
 </template>
 
 <script>
 // Imports and Data initialisation
-import axios from "axios";
-const url = "http://localhost:3000/getRandom";
 export default {
   name: "Vinyle-Component",
-  props: {},
+  props: {
+    albName: String,
+    coverUrl: String,
+  },
   data() {
     return {
       albumName: "",
       albumNameGuess: "",
       guessesRemaining: 6,
-      hints: [],
-      imageUrl: "",
       pixelsize: 0.005,
       timerCount: 200,
       timerEnabled: false,
-      correctGuess: false,
       wins: 0,
       losses: 0,
-      lastGame: ["", false],
+      lastGame: ["", false, ""],
+      todayData: "",
     };
   },
   // Timer method
@@ -78,76 +69,62 @@ export default {
           setTimeout(() => {
             this.timerCount -= 1;
           }, 100);
-          this.pixelateImage((this.pixelsize += 0.0005));
+          this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
         }
       },
-      immediate: true,
+    },
+    albName: function () {
+      this.timerEnabled = false;
+      this.timerCount = 200;
+      this.pixelsize = 0.005;
+      this.pixelateImage(this.pixelsize);
+      this.changeFormDisplay("inline", "none", "none", "none");
     },
   },
   methods: {
-    // Get today's album - todo - rename to getTodayAlbum
-    getRandomAlbum() {
-      axios
-        .get(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          this.albumName = res.data.name;
-          this.hints = res.data.hints;
-          this.imageUrl = res.data.image;
-          // Check if this game has been completed already
-          if (this.lastGame[0] == this.albumName) {
-            this.pixelateImage(1);
-            document.getElementById("start").style.display = "none";
-            document.getElementById("stop").style.display = "none";
-          } else {
-            this.pixelateImage(this.pixelsize);
-            localStorage.setItem("lastGame", ["", false]);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    },
     // Submit your guess
+    changeFormDisplay(
+      startDisplay,
+      stopDisplay,
+      submitGuessDisplay,
+      inputDisplay
+    ) {
+      document.getElementById("start").style.display = startDisplay;
+      document.getElementById("stop").style.display = stopDisplay;
+      document.getElementById("guessSubmit").style.display = submitGuessDisplay;
+      document.getElementById("albumInput").style.display = inputDisplay;
+    },
     submitGuess(event) {
       event.preventDefault();
-      if (this.albumName.toLowerCase() == this.albumNameGuess.toLowerCase()) {
+      if (this.albName.toLowerCase() == this.albumNameGuess.toLowerCase()) {
         this.timerCount = 0;
         this.pixelateImage(1);
         this.albumNameGuess = "";
         this.correctGuess = true;
-        document.getElementById("start").style.display = "none";
-        document.getElementById("stop").style.display = "none";
-        document.getElementById("guessSubmit").style.display = "none";
-        document.getElementById("albumInput").style.display = "none";
+        this.changeFormDisplay("none", "none", "none", "none");
         this.wins++;
-        localStorage.setItem("wins", this.wins);
+        /*localStorage.setItem("wins", this.wins);
         this.lastGame[0] = this.albumName;
         this.lastGame[1] = true;
-        localStorage.setItem("lastGame", this.lastGame);
+        this.lastGame[2] = this.hints[3];
+        localStorage.setItem("lastGame", this.lastGame);*/
       } else {
         this.guessesRemaining -= 1;
         this.albumNameGuess = "";
-        document.getElementById("start").style.display = "inline";
-        document.getElementById("guessSubmit").style.display = "none";
-        document.getElementById("albumInput").style.display = "none";
+        this.changeFormDisplay("inline", "none", "none", "none");
       }
       if (this.guessesRemaining == 0) {
         this.albumNameGuess = "";
         this.timerCount = 0;
         this.pixelateImage(1);
-        document.getElementById("start").style.display = "none";
-        document.getElementById("stop").style.display = "none";
+        this.changeFormDisplay("none", "none", "none", "none");
         this.losses++;
         localStorage.setItem("losses", this.losses);
       }
     },
     // Load data, wins, losses, and the previous game
     loadData() {
-      if (localStorage.getItem("wins") > 0) {
+      /*if (localStorage.getItem("wins") > 0) {
         this.wins = localStorage.getItem("wins");
       }
       if (localStorage.getItem("losses") > 0) {
@@ -155,7 +132,7 @@ export default {
       }
       if (localStorage.getItem("lastGame")) {
         this.lastGame = localStorage.getItem("lastGame").split(",");
-      }
+      }*/
     },
     // Pixelate the image
     pixelateImage(pSize) {
@@ -166,7 +143,7 @@ export default {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
       image.onload = pixelate;
-      image.src = this.imageUrl;
+      image.src = this.coverUrl;
       function pixelate() {
         let size = pSize,
           w = canvas.width * size,
@@ -178,24 +155,17 @@ export default {
     // Start the timer
     play() {
       this.timerEnabled = true;
-      document.getElementById("start").style.display = "none";
-      document.getElementById("stop").style.display = "inline";
+      this.changeFormDisplay("none", "inline", "none", "none");
     },
     pause() {
       // Pause the timer
       this.timerEnabled = false;
-      document.getElementById("start").style.display = "none";
-      document.getElementById("stop").style.display = "none";
-      document.getElementById("guessSubmit").style.display = "inline";
-      document.getElementById("albumInput").style.display = "inline";
+      this.changeFormDisplay("none", "none", "inline", "inline");
     },
   },
-  beforeMount() {
-    this.loadData();
-  },
+  beforeMount() {},
   mounted() {
-    this.getRandomAlbum();
-    this.pixelateImage();
+    this.pixelateImage(this.pixelsize);
   },
 };
 </script>
@@ -233,37 +203,5 @@ a {
 }
 form {
   margin-top: 20px;
-}
-button {
-  all: unset;
-  border: 2px solid white;
-  border-radius: 20px;
-  padding: 12px 20px;
-  margin: 10px 20px;
-  font-size: 22px;
-}
-button:hover {
-  background-color: rgb(255, 255, 255);
-  color: #252629;
-  cursor: pointer;
-}
-button:disabled {
-  cursor: default;
-  background-color: transparent;
-  color: white;
-}
-input {
-  background-color: transparent;
-  color: white;
-  height: 47px;
-  margin: 10px 20px;
-  text-align: center;
-  font-size: 22px;
-  border: 2px solid white;
-  border-radius: 20px;
-}
-input:focus {
-  background-color: white;
-  color: #252629;
 }
 </style>
