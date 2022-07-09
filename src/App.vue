@@ -26,9 +26,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
-nav {
-  padding: 30px;
-}
+
 nav span {
   font-size: 25px;
 }

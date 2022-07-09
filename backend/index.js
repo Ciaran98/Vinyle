@@ -17,7 +17,7 @@ const Album = mongoose.model("Album", {
   runDate: Number,
 });
 
-// Route - Get Random Album
+// Route to get today's vinyle album
 app.get("/getToday", async (req, res) => {
   let dateToday = new Date().setHours(0, 0, 0, 0);
   try {
@@ -30,6 +30,7 @@ app.get("/getToday", async (req, res) => {
     console.error(err);
   }
 });
+// Route to get a vinyle album from a specific date
 app.get("/getVinyleFromDate", async (req, res) => {
   let dateSelected = req.query.time;
   try {
