@@ -8,13 +8,19 @@
         @change="selectDate($event)"
       />
     </div>
-    <Countdown />
+    <!--Current Album Name? : {{ albumName }}<br />
+    Gamemode Selected? : {{ gamemodeSelected }}<br />
+    Completed Today? : {{ todayCompleted }}<br />
+    Is this today's game? : {{ isToday }}<br />
+    Todays Album? : {{ todaysAlbum }}-->
     <Vinyle
-      :alb-name="this.albumName"
-      :cover-url="this.albumCover"
-      :game-type="this.gamemodeSelected"
-      :completed-already="this.todayCompleted"
-      @update-completed-already="updateCompleted"
+      :vinyle-name="this.albumName"
+      :vinyle-cover="this.albumCover"
+      :vinyle-game-type="this.gamemodeSelected"
+      :vinyle-completed-today="this.todayCompleted"
+      :vinyle-is-today="this.isToday"
+      :vinyle-todays-album="this.todaysAlbum"
+      @update-completed-today="updateCompleted"
     />
   </div>
 </template>
@@ -27,27 +33,28 @@
 // 4th is if the user won or lost the round
 // @ is an alias to /src
 import Vinyle from "@/components/Vinyle.vue";
-import Countdown from "@/components/Countdown.vue";
 import VinyleApi from "../services/VinyleApi.js";
 export default {
   name: "HomeView",
   components: {
     Vinyle,
-    Countdown,
   },
   data() {
     return {
-      playToday: false,
       albumCover: "",
       albumName: "",
       gamemodeSelected: "",
       serverError: false,
       todayCompleted: false,
+      isToday: false,
+      todaysAlbum: "",
     };
   },
   mounted() {
     // Set the maximum date on the date input to today
-    document.getElementById("vinyleCalendar").max = new Date()
+    document.getElementById("vinyleCalendar").max = new Date(
+      new Date().getTime() - new Date().getTimezoneOffset() * 60000
+    )
       .toISOString()
       .split("T")[0];
     // Initialise the site with today's game of vinyle
@@ -60,9 +67,16 @@ export default {
         .then((res) => {
           this.albumCover = res.data.image;
           this.albumName = res.data.name;
-          this.playToday = true;
           this.gamemodeSelected = "today";
-          this.checkIfCompleted(this.albumName);
+          this.todaysAlbum = this.albumName;
+          this.checkIfTodayCompleted(this.albumName);
+          if (
+            localStorage.getItem("todaysGame") == null ||
+            localStorage.getItem("todaysGame") != this.albumName
+          ) {
+            localStorage.setItem("todaysGame", this.albumName);
+          }
+          this.isToday = true;
         })
         .catch((err) => {
           this.serverError = true;
@@ -77,7 +91,7 @@ export default {
           this.albumCover = res.data.image;
           this.albumName = res.data.name;
           this.gamemodeSelected = this.checkIfToday(date);
-          this.checkIfCompleted(this.albumName);
+          this.checkIfTodayCompleted(this.albumName);
         })
         .catch((err) => {
           this.serverError = true;
@@ -88,20 +102,23 @@ export default {
     checkIfToday(date) {
       let dateToday = new Date().setHours(0, 0, 0, 0);
       if (date == dateToday) {
+        this.isToday = true;
         return "today";
       } else {
+        this.isToday = false;
         return "calendar";
       }
     },
     // Check if the game selected has already been completed today
-    checkIfCompleted(alName) {
-      if (localStorage.getItem("previousGamePlayed") != null) {
+    checkIfTodayCompleted() {
+      if (
+        localStorage.getItem("previousGamePlayed") != null &&
+        localStorage.getItem("todaysGame") != null
+      ) {
         let prevGame = localStorage.getItem("previousGamePlayed").split(",");
-        if (prevGame[0] == alName) {
+        let todayGame = localStorage.getItem("todaysGame");
+        if (prevGame[0] == todayGame) {
           this.todayCompleted = true;
-        } else if (this.gamemodeSelected == "today" && prevGame[0] != alName) {
-          localStorage.removeItem("previousGamePlayed");
-          this.todayCompleted = false;
         } else {
           this.todayCompleted = false;
         }

@@ -1,18 +1,6 @@
 <template>
   <img alt="Vinyle logo" src="../src/assets/vinylelogo.png" />
-  <nav>
-    <router-link to="/">Home</router-link><span class="nav-divide"> | </span>
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view />
-  <div class="footer">
-    <nav>
-      <a href="https://www.linkedin.com/in/ciaran-melarkey-694469194/"
-        >LinkedIn</a
-      ><span class="nav-divide"> | </span>
-      <a href="https://github.com/Ciaran98">GitHub</a>
-    </nav>
-  </div>
 </template>
 
 <style>

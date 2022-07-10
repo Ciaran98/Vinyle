@@ -2,36 +2,39 @@
 <template>
   <div>
     <ResultScreen
-      :game-Result="this.rsResult"
-      :game-Attempts="this.rsAttempts"
-      :game-Time="this.rsTime"
-      :game-Album-Name="this.rsAlbumName"
+      :game-result="this.rsResult"
+      :game-attempts="this.rsAttempts"
+      :game-time="this.rsTime"
+      :game-album-name="this.rsAlbumName"
+      :game-album-name-today="this.rsAlbumNameToday"
     />
-    <h1>Guess the album name from the artwork!</h1>
-    <p v-if="!completedAlready">
-      Time Remaining: {{ Math.round(timerCount / 10) }}
-    </p>
-    <p v-if="!completedAlready">Guesses Remaining: {{ guessesRemaining }}</p>
-    <p>Stats - Wins: {{ wins }} - Losses: {{ losses }}</p>
-    <div>
+    <!--completed today: {{ vinyleCompletedToday }}<br />
+    game type: {{ vinyleGameType }}<br />
+    is today vinyle: {{ vinyleIsToday }}<br />
+    name: {{ vinyleName }}<br />
+    todays name: {{ vinyleTodaysAlbum }}
+    {{ guessesRemaining }}-->
+    <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
-    <form>
-      <button
-        type="submit"
-        @click="submitGuess($event)"
-        :disabled="!albumNameGuess"
-        id="guessSubmit"
-      >
-        Guess</button
-      ><br /><input
-        v-model="albumNameGuess"
-        :disabled="guessesRemaining == 0"
-        id="albumInput"
-      />
-    </form>
-    <button @click="play()" id="start">Start</button>
-    <button @click="pause()" id="stop">Stop</button>
+    <div id="game-elements">
+      <form>
+        <button
+          type="submit"
+          @click="submitGuess($event)"
+          :disabled="!albumNameGuess"
+          id="guessSubmit"
+        >
+          Guess</button
+        ><br /><input
+          v-model="albumNameGuess"
+          :disabled="guessesRemaining == 0"
+          id="albumInput"
+        />
+      </form>
+      <button @click="play()" id="start">Start</button>
+      <button @click="pause()" id="stop">Stop</button>
+    </div>
   </div>
 </template>
 <!----------------------------------------End of Template----------------------------------------------------------->
@@ -42,27 +45,29 @@ import ResultScreen from "./ResultScreen.vue";
 export default {
   name: "Vinyle-Component",
   props: {
-    albName: String,
-    coverUrl: String,
-    gameType: String,
-    completedAlready: Boolean,
+    vinyleName: String,
+    vinyleCover: String,
+    vinyleGameType: String,
+    vinyleCompletedToday: Boolean,
+    vinyleIsToday: Boolean,
+    vinyleTodaysAlbum: String,
   },
   data() {
     return {
+      playing: false,
       albumNameGuess: "",
       guessesRemaining: 6,
       pixelsize: 0.005,
       timerCount: 200,
       timerEnabled: false,
-      wins: 0,
-      losses: 0,
-      completedGame: false,
       previousGame: [],
+      winsteak: 0,
       // --------------- Result Screen Variables ------------ \\
       rsResult: "",
       rsAttempts: "",
       rsTime: "",
       rsAlbumName: "",
+      rsAlbumNameToday: "",
       // ----------------------------------------------------- \\
     };
   },
@@ -83,35 +88,58 @@ export default {
           }, 100);
           this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
         }
-        if (value == 0 && !this.completedGame && !this.completedAlready) {
-          this.pixelateImage(1);
-          this.losses++;
-          localStorage.setItem("stats", [this.wins, this.losses]);
-          this.changeFormDisplay("none", "none", "none", "none");
+        if (value == 0) {
+          this.setResults("loss", "0", "0");
+          if (this.vinyleName == this.vinyleTodaysAlbum) {
+            localStorage.setItem("previousGamePlayed", [
+              this.vinyleName,
+              (200 - this.timerCount) / 10,
+              7 - this.guessesRemaining,
+              "loss",
+            ]);
+          }
         }
       },
     },
-    albName: function () {
+    vinyleName: function () {
+      this.timerCount = 200;
+      this.pixelsize = 0.005;
+      this.guessesRemaining = 6;
       this.timerEnabled = false;
-      this.completedGame = false;
-      if (!this.completedAlready) {
-        this.setupGame("not completed", 6, 200, 0.005);
-        this.changeFormDisplay("inline", "none", "none", "none");
-      } else {
-        this.prepareResults(
+      document.getElementById("game-area").animate(
+        [
+          {
+            opacity: "0",
+          },
+          {
+            opacity: "1",
+          },
+        ],
+        {
+          fill: "forwards",
+          duration: 300,
+          direction: "alternate",
+        }
+      );
+      if (
+        this.vinyleTodaysAlbum == this.vinyleName &&
+        this.vinyleCompletedToday
+      ) {
+        this.setResults(
           this.previousGame[3],
-          this.previousGame[1],
           this.previousGame[2],
-          this.previousGame[0]
+          this.previousGame[1]
         );
-        this.setupGame("win", 0, 0, 1);
         this.changeFormDisplay("none", "none", "none", "none");
+      } else {
+        this.setResults("none", "0", "0");
+        this.changeFormDisplay("inline", "none", "none", "none");
       }
-      this.pixelateImage(this.pixelsize);
+      this.todayCompletedPixelationOff();
     },
   },
   methods: {
-    // Submit your guess
+    // Change the display properties of the form elements
     changeFormDisplay(
       startDisplay,
       stopDisplay,
@@ -126,44 +154,38 @@ export default {
     // Function to submit guess
     submitGuess(event) {
       event.preventDefault();
+      // Check if guess is correct, if true, check the game type, if calendar, set today's stat to a win, and emit that the game is now completed
       if (
-        this.albName.replace(/\s+/g, "").toLocaleLowerCase() ==
+        this.vinyleName.replace(/\s+/g, "").toLocaleLowerCase() ==
         this.albumNameGuess.replace(/\s+/g, "").toLocaleLowerCase()
       ) {
-        if (this.gameType == "today") {
-          this.setTodayStats("win");
-          this.$emit("update-completed-already", true);
+        if (this.vinyleGameType == "today") {
+          this.$emit("update-completed-today", true);
+          localStorage.setItem("previousGamePlayed", [
+            this.vinyleName,
+            (200 - this.timerCount) / 10,
+            7 - this.guessesRemaining,
+            "win",
+          ]);
+          this.getPreviouslyCompletedGame();
         }
-        this.prepareResults(
+        this.setResults(
           "win",
-          (20 - Math.round(this.timerCount / 10)).toString(),
-          (6 - this.guessesRemaining).toString(),
-          this.albName
+          String(7 - this.guessesRemaining),
+          String((200 - this.timerCount) / 10)
         );
-        this.completedGame = true;
-        this.timerCount = 0;
+        // Preparethe results as props for the result screen component
+        // Set completed game to true, the timer to zero, unpixelate the image
         this.pixelateImage(1);
-        this.albumNameGuess = "";
         this.changeFormDisplay("none", "none", "none", "none");
-        this.wins++;
-        localStorage.setItem("stats", [this.wins, this.losses]);
       } else {
-        if (this.gameType == "today") {
-          this.setTodayStats("loss");
-        }
-        this.guessesRemaining -= 1;
-        this.albumNameGuess = "";
+        this.guessesRemaining--;
         this.changeFormDisplay("inline", "none", "none", "none");
       }
       if (this.guessesRemaining == 0) {
-        if (this.gameType == "today") {
-          this.setTodayStats("loss");
-        }
-        this.albumNameGuess = "";
         this.timerCount = 0;
         this.pixelateImage(1);
         this.changeFormDisplay("none", "none", "none", "none");
-        localStorage.setItem("stats", [this.wins, this.losses]);
       }
     },
     // Pixelate the image
@@ -175,7 +197,7 @@ export default {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
       image.onload = pixelate;
-      image.src = this.coverUrl;
+      image.src = this.vinyleCover;
       function pixelate() {
         let size = pSize,
           w = canvas.width * size,
@@ -186,6 +208,7 @@ export default {
     },
     // Start the timer
     play() {
+      this.playing = true;
       this.timerEnabled = true;
       this.changeFormDisplay("none", "inline", "none", "none");
     },
@@ -194,61 +217,36 @@ export default {
       this.timerEnabled = false;
       this.changeFormDisplay("none", "none", "inline", "inline");
     },
-    // Load stats to be displayed
-    loadStats() {
-      if (localStorage.getItem("stats") != null) {
-        this.wins = localStorage.getItem("stats").split(",")[0];
-        this.losses = localStorage.getItem("stats").split(",")[1];
+    todayCompletedPixelationOff() {
+      if (
+        this.vinyleTodaysAlbum == this.vinyleName &&
+        this.vinyleCompletedToday
+      ) {
+        this.pixelateImage(1);
+      } else {
+        this.pixelateImage(this.pixelsize);
       }
     },
-    // Load previous game data
-    loadPreviousGame() {
+    getPreviouslyCompletedGame() {
       if (localStorage.getItem("previousGamePlayed") != null) {
-        return localStorage.getItem("previousGamePlayed").split(",");
+        this.previousGame = localStorage
+          .getItem("previousGamePlayed")
+          .split(",");
       }
     },
-    // Set todays stats after playing today's game
-    setTodayStats(result) {
-      localStorage.setItem("previousGamePlayed", [
-        this.albName,
-        20 - Math.round(this.timerCount / 10),
-        6 - this.guessesRemaining,
-        result,
-      ]);
-    },
-    // Function to setup the results in the results component
-    prepareResults(result, time, attempts, alname) {
+    setResults(result, attempts, time) {
+      this.rsAlbumName = this.vinyleName;
+      this.rsAlbumNameToday = this.vinyleTodaysAlbum;
+      this.rsAttempts = attempts;
       this.rsResult = result;
       this.rsTime = time;
-      this.rsAttempts = attempts;
-      this.rsAlbumName = alname;
-    },
-    //Result guesses, time, timerenabled, pixelsize
-    setupGame(res, guess, time, pixel) {
-      this.rsResult = res;
-      this.guessesRemaining = guess;
-      this.timerCount = time;
-      this.pixelsize = pixel;
     },
   },
   beforeMount() {
-    this.previousGame = this.loadPreviousGame();
-    this.loadStats();
+    this.getPreviouslyCompletedGame();
   },
   mounted() {
-    if (this.previousGame != null) {
-      this.prepareResults(
-        this.previousGame[3],
-        this.previousGame[1],
-        this.previousGame[2],
-        this.previousGame[0]
-      );
-    }
-    if (this.completedAlready) {
-      this.pixelateImage(1);
-    } else {
-      this.pixelateImage(this.pixelsize);
-    }
+    this.todayCompletedPixelationOff();
   },
   components: { ResultScreen },
 };
@@ -256,6 +254,16 @@ export default {
 <!----------------------------------------End of script------------------------------------------------------------>
 <!----------------------------------------Style-------------------------------------------------------------------->
 <style scoped>
+@keyframes fade {
+  0% {
+    opacity: 0;
+    background-color: purple;
+  }
+  100% {
+    opacity: 1;
+    background-color: pink;
+  }
+}
 canvas {
   height: 600px;
   width: 600px;

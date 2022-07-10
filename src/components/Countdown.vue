@@ -1,8 +1,10 @@
 <template>
-  <div v-if="loaded">
-    Next Vinyle in:<br />{{ displayHours }} : {{ displayMinutes }} :
-    {{ displaySeconds }}
-  </div>
+  <transition>
+    <div v-if="loaded">
+      {{ displayHours }} : {{ displayMinutes }} :
+      {{ displaySeconds }}
+    </div>
+  </transition>
   <div v-if="expired">New Vinyle is out now!</div>
 </template>
 <script>
@@ -53,4 +55,19 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.v-enter-active {
+  animation: bounce-in 0.3s;
+}
+.v-leave-active {
+  animation: bounce-in 0.3s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>
