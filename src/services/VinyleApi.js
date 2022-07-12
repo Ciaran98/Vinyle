@@ -6,7 +6,7 @@ export default {
   // Function to call api to get today's vinyle album
   getTodayVinyle() {
     return axios
-      .get("/getToday")
+      .get("/getTodayVinyle")
       .then((res) => res)
       .catch((err) => {
         console.error(err);
