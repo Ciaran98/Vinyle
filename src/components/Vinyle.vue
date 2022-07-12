@@ -229,7 +229,7 @@ export default {
       ctx.imageSmoothingEnabled = false;
       image.onload = pixelate;
       //image.src = this.vinyleCover;
-      if (this.vinyleName.length != 0) {
+      if (this.vinyleName != "") {
         image.src = require("@/assets/albums/" +
           this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase() +
           ".jpg");
