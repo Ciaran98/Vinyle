@@ -25,7 +25,7 @@ const Album = mongoose.model("Album", {
 });
 
 // Route to get today's vinyle album
-app.get("/getTodayVinyle", async (req, res) => {
+app.get("getTodayVinyle", async (req, res) => {
   let dateToday = new Date().setHours(0, 0, 0, 0);
   try {
     const data = await Album.findOne({ runDate: dateToday });
@@ -37,7 +37,7 @@ app.get("/getTodayVinyle", async (req, res) => {
   }
 });
 // Route to get a vinyle album from a specific date
-app.get("/getVinyleFromDate", async (req, res) => {
+app.get("getVinyleFromDate", async (req, res) => {
   let dateSelected = req.query.time;
   try {
     const data = await Album.findOne({ runDate: dateSelected });
