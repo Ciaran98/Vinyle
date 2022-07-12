@@ -58,7 +58,7 @@ export default {
     let today = new Date(
       new Date().getTime() - new Date().getTimezoneOffset() * 60000
     );
-    this.getVinyleFromDate(today.toISOString().split("T")[0]);
+    this.selectDate(today.toISOString().split("T")[0]);
     // Initialise the site with today's game of vinyle
     //this.selectToday();
   },
