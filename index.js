@@ -4,16 +4,13 @@ const path = require("path");
 app = express();
 app.use("/", serveStatic(path.join(__dirname, "/dist")));
 // this * route is to serve project on different page routes except root `/`
-app.get(/.*/, function (req, res) {
-  res.sendFile(path.join(__dirname, "/dist/index.html"));
-});
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port);
 
 const mongoose = require("mongoose");
-//const conf = require("./src/config");
-//const mongoPass = conf.MONGO_PASS;
-const mongoPass = process.env.MONGO_PASS;
+const conf = require("./src/config");
+const mongoPass = conf.MONGO_PASS;
+//const mongoPass = process.env.MONGO_PASS;
 const uri = `mongodb+srv://VinyleDatabase:${mongoPass}@vinylecluster.ommzx.mongodb.net/?retryWrites=true&w=majority`;
 const bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: "30mb" }));

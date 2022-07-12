@@ -66,7 +66,6 @@ export default {
           this.albumName = res.data.name;
           this.gamemodeSelected = "today";
           this.todaysAlbum = this.albumName;
-
           if (
             localStorage.getItem("todaysGame") == null ||
             localStorage.getItem("todaysGame") != this.albumName
