@@ -8,6 +8,7 @@
       :game-album-name="this.rsAlbumName"
       :game-album-name-today="this.rsAlbumNameToday"
     />
+
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
@@ -40,7 +41,6 @@ export default {
   name: "Vinyle-Component",
   props: {
     vinyleName: String,
-    vinyleCover: String,
     vinyleGameType: String,
     vinyleCompletedToday: Boolean,
     vinyleIsToday: Boolean,
@@ -228,7 +228,7 @@ export default {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
       image.onload = pixelate;
-      image.src = this.vinyleCover;
+      //image.src = this.vinyleCover;
       if (this.vinyleName.length != 0) {
         image.src = require("@/assets/albums/" +
           this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase() +
