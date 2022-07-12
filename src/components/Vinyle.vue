@@ -8,12 +8,6 @@
       :game-album-name="this.rsAlbumName"
       :game-album-name-today="this.rsAlbumNameToday"
     />
-    <!--completed today: {{ vinyleCompletedToday }}<br />
-    game type: {{ vinyleGameType }}<br />
-    is today vinyle: {{ vinyleIsToday }}<br />
-    name: {{ vinyleName }}<br />
-    todays name: {{ vinyleTodaysAlbum }}
-    {{ guessesRemaining }}-->
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
@@ -89,22 +83,58 @@ export default {
           this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
         }
         if (value == 0) {
-          this.setResults("loss", "0", "0");
+          this.changeFormDisplay("none", "none", "none", "none");
+          let res = "";
+          if (this.guessesRemaining > 0) {
+            res = "timeout";
+          } else {
+            res = "loss";
+          }
+          this.setResults(res, String(7 - this.guessesRemaining), "0");
           if (this.vinyleName == this.vinyleTodaysAlbum) {
             localStorage.setItem("previousGamePlayed", [
               this.vinyleName,
               (200 - this.timerCount) / 10,
               7 - this.guessesRemaining,
-              "loss",
+              res,
             ]);
           }
         }
       },
     },
+    guessesRemaining: function () {
+      if (this.guessesRemaining != 6 && this.guessesRemaining != 0) {
+        document.getElementById("game-area").animate(
+          [
+            {
+              transform: "translateX(0)",
+            },
+            {
+              transform: "translateX(30px)",
+            },
+            {
+              transform: "translateX(0)",
+            },
+            {
+              transform: "translateX(-30px)",
+            },
+            {
+              transform: "translateX(0)",
+            },
+          ],
+          {
+            fill: "none",
+            duration: 200,
+            iterations: 2,
+          }
+        );
+      }
+    },
     vinyleName: function () {
       this.timerCount = 200;
       this.pixelsize = 0.005;
       this.guessesRemaining = 6;
+      this.albumNameGuess = "";
       this.timerEnabled = false;
       document.getElementById("game-area").animate(
         [
@@ -156,8 +186,8 @@ export default {
       event.preventDefault();
       // Check if guess is correct, if true, check the game type, if calendar, set today's stat to a win, and emit that the game is now completed
       if (
-        this.vinyleName.replace(/\s+/g, "").toLocaleLowerCase() ==
-        this.albumNameGuess.replace(/\s+/g, "").toLocaleLowerCase()
+        this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase() ==
+        this.albumNameGuess.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase()
       ) {
         if (this.vinyleGameType == "today") {
           this.$emit("update-completed-today", true);
@@ -187,6 +217,7 @@ export default {
         this.pixelateImage(1);
         this.changeFormDisplay("none", "none", "none", "none");
       }
+      this.albumNameGuess = "";
     },
     // Pixelate the image
     pixelateImage(pSize) {
@@ -198,6 +229,12 @@ export default {
       ctx.imageSmoothingEnabled = false;
       image.onload = pixelate;
       image.src = this.vinyleCover;
+      if (this.vinyleName.length != 0) {
+        image.src = require("@/assets/albums/" +
+          this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase() +
+          ".jpg");
+      }
+
       function pixelate() {
         let size = pSize,
           w = canvas.width * size,
@@ -267,6 +304,8 @@ export default {
 canvas {
   height: 600px;
   width: 600px;
+  border-radius: 5px;
+  border: 2px solid rgb(36, 36, 36);
 }
 #albumInput,
 #guessSubmit,

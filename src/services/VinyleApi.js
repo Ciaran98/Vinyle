@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://localhost:3000/";
+const url = "http://localhost:8080/";
 export default {
   // Function to call api to get today's vinyle album
   getTodayVinyle() {

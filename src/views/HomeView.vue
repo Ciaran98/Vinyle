@@ -65,17 +65,25 @@ export default {
     selectToday() {
       VinyleApi.getTodayVinyle()
         .then((res) => {
-          this.albumCover = res.data.image;
           this.albumName = res.data.name;
           this.gamemodeSelected = "today";
           this.todaysAlbum = this.albumName;
-          this.checkIfTodayCompleted(this.albumName);
+
           if (
             localStorage.getItem("todaysGame") == null ||
             localStorage.getItem("todaysGame") != this.albumName
           ) {
             localStorage.setItem("todaysGame", this.albumName);
           }
+          if (localStorage.getItem("previousGamePlayed") != null) {
+            if (
+              localStorage.getItem("previousGamePlayed").split(",")[0] !=
+              this.todaysAlbum
+            ) {
+              localStorage.removeItem("previousGamePlayed");
+            }
+          }
+          this.checkIfTodayCompleted(this.albumName);
           this.isToday = true;
         })
         .catch((err) => {
@@ -88,7 +96,6 @@ export default {
       let date = new Date(event.target.value).setHours(0, 0, 0, 0);
       VinyleApi.getVinyleFromDate(date)
         .then((res) => {
-          this.albumCover = res.data.image;
           this.albumName = res.data.name;
           this.gamemodeSelected = this.checkIfToday(date);
           this.checkIfTodayCompleted(this.albumName);

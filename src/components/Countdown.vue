@@ -56,6 +56,11 @@ export default {
 };
 </script>
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Teko&display=swap");
+div {
+  font-family: "Teko", sans-serif;
+  font-size: 75px;
+}
 .v-enter-active {
   animation: bounce-in 0.3s;
 }

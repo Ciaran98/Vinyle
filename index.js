@@ -1,20 +1,25 @@
 const express = require("express");
-const port = 3000;
-const app = express();
+const serveStatic = require("serve-static");
+const path = require("path");
+app = express();
+app.use(serveStatic(path.join(__dirname, "dist")));
+const port = process.env.PORT || 8080;
+app.listen(port);
+
 const mongoose = require("mongoose");
-const conf = require("../backend/config.json");
-const uri = `mongodb+srv://VinyleDatabase:${conf.MongoPass}@vinylecluster.ommzx.mongodb.net/?retryWrites=true&w=majority`;
+const conf = require("./src/config");
+const mongoPass = process.env.MONGO_PASS || conf.MongoPass;
+const uri = `mongodb+srv://VinyleDatabase:${mongoPass}@vinylecluster.ommzx.mongodb.net/?retryWrites=true&w=majority`;
 const bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/albums", express.static("public"));
 const cors = require("cors");
 app.use(cors());
 mongoose.connect(uri);
 const Album = mongoose.model("Album", {
   name: String,
-  albumArt: String,
   runDate: Number,
+  albumIndex: Number,
 });
 
 // Route to get today's vinyle album
@@ -23,7 +28,6 @@ app.get("/getToday", async (req, res) => {
   try {
     const data = await Album.findOne({ runDate: dateToday });
     res.send({
-      image: data.albumArt,
       name: data.name,
     });
   } catch (err) {
@@ -36,7 +40,6 @@ app.get("/getVinyleFromDate", async (req, res) => {
   try {
     const data = await Album.findOne({ runDate: dateSelected });
     res.send({
-      image: data.albumArt,
       name: data.name,
     });
   } catch (err) {
@@ -47,13 +50,10 @@ app.get("/getVinyleFromDate", async (req, res) => {
 app.post("/postNewAlbum", (req, res) => {
   const newAlbum = new Album({
     name: req.body.name,
-    albumArt: req.body.albumArt,
     runDate: req.body.runDate,
+    albumIndex: req.body.albumIndex,
   });
   newAlbum.save().then(() => console.log("Record Saved"));
 
   res.send("True");
-});
-app.listen(port, () => {
-  console.log(`App is listening on port ${port}`);
 });

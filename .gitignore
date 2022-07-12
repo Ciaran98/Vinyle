@@ -2,8 +2,7 @@
 node_modules
 /dist
 
-/backend/config.json
-/backend/public
+config.json
 # local env files
 .env.local
 .env.*.local
