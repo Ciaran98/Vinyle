@@ -8,7 +8,7 @@
       :game-album-name="this.rsAlbumName"
       :game-album-name-today="this.rsAlbumNameToday"
     />
-
+    {{ vinyleName }}
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
