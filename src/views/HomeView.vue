@@ -15,7 +15,6 @@
     Todays Album? : {{ todaysAlbum }}-->
     <Vinyle
       :vinyle-name="this.albumName"
-      :vinyle-cover="this.albumCover"
       :vinyle-game-type="this.gamemodeSelected"
       :vinyle-completed-today="this.todayCompleted"
       :vinyle-is-today="this.isToday"
@@ -41,8 +40,7 @@ export default {
   },
   data() {
     return {
-      albumCover: "",
-      albumName: "",
+      albumName: "default",
       gamemodeSelected: "",
       serverError: false,
       todayCompleted: false,

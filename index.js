@@ -8,8 +8,9 @@ const port = process.env.PORT || 8080;
 app.listen(port);
 
 const mongoose = require("mongoose");
-//const conf = require("./src/config");
-const mongoPass = process.env.MONGO_PASS;
+const conf = require("./src/config");
+const mongoPass = conf.MONGO_PASS;
+//const mongoPass = process.env.MONGO_PASS;
 const uri = `mongodb+srv://VinyleDatabase:${mongoPass}@vinylecluster.ommzx.mongodb.net/?retryWrites=true&w=majority`;
 const bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: "30mb" }));
