@@ -6,7 +6,7 @@ export default {
   // Function to call api to get today's vinyle album
   getTodayVinyle() {
     return axios
-      .get("/getTodayVinyle", { params: { today: true } })
+      .get("getTodayVinyle")
       .then((res) => res)
       .catch((err) => {
         console.error(err);
@@ -15,7 +15,7 @@ export default {
   // function to call api to get vinyle album from specified date
   getVinyleFromDate(time) {
     return axios
-      .get("/getVinyleFromDate", { params: { time: time } })
+      .get("getVinyleFromDate", { params: { time: time } })
       .then((res) => res)
       .catch((err) => {
         console.error(err);
