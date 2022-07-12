@@ -61,7 +61,7 @@ export default {
   methods: {
     // Select today's vinyle game
     selectToday() {
-      VinyleApi.getTodayVinyle()
+      VinyleApi.getToday()
         .then((res) => {
           this.albumName = res.data.name;
           this.gamemodeSelected = "today";
