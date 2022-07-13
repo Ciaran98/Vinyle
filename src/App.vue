@@ -17,6 +17,7 @@ body {
 }
 img {
   width: 600px;
+  image-rendering: high-quality;
 }
 @media (max-width: 768px) {
   img {

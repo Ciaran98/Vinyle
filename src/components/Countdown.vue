@@ -1,11 +1,11 @@
 <template>
   <transition>
     <div v-if="loaded">
-      {{ displayHours }} : {{ displayMinutes }} :
-      {{ displaySeconds }}
+      Next Vinyle in:<br /><span>
+        {{ displayHours }} : {{ displayMinutes }} : {{ displaySeconds }}</span
+      >
     </div>
   </transition>
-  <div v-if="expired">New Vinyle is out now!</div>
 </template>
 <script>
 export default {
@@ -56,18 +56,21 @@ export default {
 };
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Teko&display=swap");
-div {
-  font-family: "Teko", sans-serif;
+div > span {
   font-size: 75px;
 }
+@media (max-width: 768px) {
+  div > span {
+    font-size: 50px;
+  }
+}
 .v-enter-active {
-  animation: bounce-in 0.3s;
+  animation: fade-in 0.3s;
 }
 .v-leave-active {
-  animation: bounce-in 0.3s reverse;
+  animation: fade-in 0.4s reverse;
 }
-@keyframes bounce-in {
+@keyframes fade-in {
   0% {
     opacity: 0;
   }

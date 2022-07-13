@@ -43,6 +43,7 @@ app.get("/getVinyleFromDate", async (req, res) => {
     const data = await Album.findOne({ runDate: dateSelected });
     res.send({
       name: data.name,
+      albumIndex: data.albumIndex,
     });
   } catch (err) {
     console.error(err);

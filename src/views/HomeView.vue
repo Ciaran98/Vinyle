@@ -14,6 +14,7 @@
       :vinyle-completed-today="this.todayCompleted"
       :vinyle-is-today="this.isToday"
       :vinyle-todays-album="this.todaysAlbum"
+      :vinyle-game-number="this.gameNumber"
       @update-completed-today="updateCompleted"
     />
   </div>
@@ -41,6 +42,7 @@ export default {
       todayCompleted: false,
       isToday: false,
       todaysAlbum: "",
+      gameNumber: "",
     };
   },
   mounted() {
@@ -91,6 +93,7 @@ export default {
         .then((res) => {
           this.albumName = res.data.name;
           this.gamemodeSelected = this.checkIfToday(date);
+          this.gameNumber = res.data.albumIndex;
           this.checkIfTodayCompleted(this.albumName);
         })
         .catch((err) => {

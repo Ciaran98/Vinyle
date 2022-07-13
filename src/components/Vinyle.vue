@@ -7,6 +7,7 @@
       :game-time="this.rsTime"
       :game-album-name="this.rsAlbumName"
       :game-album-name-today="this.rsAlbumNameToday"
+      :game-number="this.vinyleGameNumber"
     />
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
@@ -48,6 +49,7 @@ export default {
     vinyleCompletedToday: Boolean,
     vinyleIsToday: Boolean,
     vinyleTodaysAlbum: String,
+    vinyleGameNumber: String,
   },
   data() {
     return {
@@ -314,7 +316,7 @@ canvas {
 div.game-elements {
   padding: 20px;
   max-width: 400px;
-  min-height: 200px;
+  min-height: 100px;
   margin: auto;
 }
 
