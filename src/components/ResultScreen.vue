@@ -30,12 +30,14 @@
     </div>
   </Transition>
   <Transition>
-    <button
-      v-if="gameAlbumName == gameAlbumNameToday"
-      @click="copyToClipboard()"
-    >
-      Share Results
-    </button>
+    <div v-if="gameResult == 'win' || gameResult == 'loss'">
+      <button
+        v-if="gameAlbumName == gameAlbumNameToday"
+        @click="copyToClipboard()"
+      >
+        Share Results
+      </button>
+    </div>
   </Transition>
 </template>
 <script>
