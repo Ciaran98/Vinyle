@@ -37,6 +37,9 @@ img {
   img {
     width: 250px;
   }
+  h1.header {
+    font-size: 100px;
+  }
 }
 
 button {
