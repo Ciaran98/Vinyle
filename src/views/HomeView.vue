@@ -8,11 +8,6 @@
         @change="selectDate($event)"
       />
     </div>
-    <!--Current Album Name? : {{ albumName }}<br />
-    Gamemode Selected? : {{ gamemodeSelected }}<br />
-    Completed Today? : {{ todayCompleted }}<br />
-    Is this today's game? : {{ isToday }}<br />
-    Todays Album? : {{ todaysAlbum }}-->
     <Vinyle
       :vinyle-name="this.albumName"
       :vinyle-game-type="this.gamemodeSelected"
@@ -62,32 +57,6 @@ export default {
   methods: {
     // Select today's vinyle game
     selectToday() {
-      /*VinyleApi.getTodayVinyle()
-        .then((res) => {
-          this.albumName = res.data.name;
-          this.gamemodeSelected = "today";
-          this.todaysAlbum = this.albumName;
-          if (
-            localStorage.getItem("todaysGame") == null ||
-            localStorage.getItem("todaysGame") != this.albumName
-          ) {
-            localStorage.setItem("todaysGame", this.albumName);
-          }
-          if (localStorage.getItem("previousGamePlayed") != null) {
-            if (
-              localStorage.getItem("previousGamePlayed").split(",")[0] !=
-              this.todaysAlbum
-            ) {
-              localStorage.removeItem("previousGamePlayed");
-            }
-          }
-          this.checkIfTodayCompleted(this.albumName);
-          this.isToday = true;
-        })
-        .catch((err) => {
-          this.serverError = true;
-          console.error(err);
-        });*/
       VinyleApi.getVinyleFromDate(new Date().setHours(0, 0, 0, 0))
         .then((res) => {
           this.albumName = res.data.name;

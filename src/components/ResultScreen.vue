@@ -74,7 +74,6 @@ export default {
 };
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 div {
   font-family: "Raleway", sans-serif;
 }
@@ -111,5 +110,8 @@ div.game-result {
   100% {
     opacity: 1;
   }
+}
+button {
+  width: 150px;
 }
 </style>

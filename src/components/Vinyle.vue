@@ -11,23 +11,26 @@
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
-    <div id="game-elements">
+    <div class="game-elements">
       <form>
-        <button
+        <input
+          autocomplete="off"
+          v-model="albumNameGuess"
+          :disabled="guessesRemaining == 0"
+          id="albumInput"
+          placeholder="Search for an album..."
+        /><br /><button
           type="submit"
+          class="submit"
           @click="submitGuess($event)"
           :disabled="!albumNameGuess"
           id="guessSubmit"
         >
-          Guess</button
-        ><br /><input
-          v-model="albumNameGuess"
-          :disabled="guessesRemaining == 0"
-          id="albumInput"
-        />
+          Guess
+        </button>
       </form>
-      <button @click="play()" id="start">Start</button>
-      <button @click="pause()" id="stop">Stop</button>
+      <button class="play" @click="play()" id="start">Start</button>
+      <button class="play" @click="pause()" id="stop">Stop</button>
     </div>
   </div>
 </template>
@@ -48,7 +51,6 @@ export default {
   },
   data() {
     return {
-      playing: false,
       albumNameGuess: "",
       guessesRemaining: 6,
       pixelsize: 0.005,
@@ -245,7 +247,6 @@ export default {
     },
     // Start the timer
     play() {
-      this.playing = true;
       this.timerEnabled = true;
       this.changeFormDisplay("none", "inline", "none", "none");
     },
@@ -294,46 +295,38 @@ export default {
 @keyframes fade {
   0% {
     opacity: 0;
-    background-color: purple;
   }
   100% {
     opacity: 1;
-    background-color: pink;
   }
 }
 canvas {
   height: 600px;
   width: 600px;
   border-radius: 5px;
-  border: 2px solid rgb(36, 36, 36);
+  border: 2px solid #242424;
 }
 #albumInput,
 #guessSubmit,
 #stop {
   display: none;
 }
+div.game-elements {
+  padding: 20px;
+  max-width: 400px;
+  min-height: 200px;
+  margin: auto;
+}
+
+input {
+  width: 300px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Raleway", sans-serif;
+}
 #start {
   display: inline;
-}
-button {
-  all: unset;
-  padding: 20px 40px;
-  background-color: #36d804;
-  box-shadow: 0 5px 0 #269703;
-  border-radius: 15px;
-  color: aliceblue;
-  font-size: 20px;
-  transition: all 0.2s ease;
-  font-family: "Comfortaa", cursive;
-  font-weight: bold;
-}
-button:enabled:active {
-  box-shadow: none;
-  transform: translateY(5px);
-}
-button:disabled {
-  background-color: #e20000;
-  box-shadow: 0 5px 0 #830000;
 }
 @media (max-width: 768px) {
   canvas {

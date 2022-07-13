@@ -4,29 +4,16 @@
 </template>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 body {
   color: #ffffff;
-  background-color: #252629;
+  background-color: #1f1f20;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-}
-
-nav span {
-  font-size: 25px;
-}
-nav a {
-  font-size: 25px;
-  color: #e6ebf0;
-  text-decoration: none;
-}
-
-nav a.router-link-exact-active {
-  text-decoration: underline;
-  font-weight: bold;
 }
 img {
   width: 600px;
@@ -36,11 +23,28 @@ img {
     width: 250px;
   }
 }
-div.footer {
-  display: flex;
-  justify-content: center;
-  height: 100px;
-  align-items: center;
-  margin-top: 30px;
+
+button {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  border: 2px solid white;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 10px;
+  font-family: "Raleway", sans-serif;
+  background-color: rgb(0, 206, 0);
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  transition: background-color 0.2s;
+}
+button:enabled:hover {
+  transition: background-color 0.2s;
+  background-color: rgb(0, 126, 0);
+}
+button:disabled {
+  transition: background-color 0.2s;
+  background-color: crimson;
 }
 </style>
