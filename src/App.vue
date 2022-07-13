@@ -1,13 +1,27 @@
 <template>
-  <img alt="Vinyle logo" src="../src/assets/vinylelogo.png" />
+  <h1 class="header">Vinyle.</h1>
   <router-view />
 </template>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
 body {
   color: #ffffff;
   background-color: #1f1f20;
+}
+h1.header {
+  padding: 0;
+  margin: 0;
+  font-family: "Dancing Script", cursive;
+  font-size: 200px;
+  background: linear-gradient(
+    90deg,
+    rgb(222, 235, 47) 0%,
+    rgb(40, 223, 255) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
