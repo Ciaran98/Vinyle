@@ -91,12 +91,13 @@ h1.header {
   margin: 0;
   font-family: "Dancing Script", cursive;
   font-size: 200px;
+  cursor: default;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  font-family: "Raleway", sans-serif;
 }
 img {
   width: 600px;

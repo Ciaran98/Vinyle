@@ -15,12 +15,30 @@
     <div class="game-elements">
       <form>
         <input
+          type="text"
           autocomplete="off"
           v-model="albumNameGuess"
           :disabled="guessesRemaining == 0"
           id="albumInput"
           placeholder="Search for an album..."
-        /><br /><button
+          @input="filterAlbums"
+          @focus="resultVisible = true"
+        />
+        <div
+          style="all: unset"
+          v-if="searchResults.length > 0 && resultVisible"
+        >
+          <ul>
+            <li
+              v-for="searchResult in searchResults"
+              :key="searchResult"
+              @click="setAlbum(searchResult)"
+            >
+              {{ searchResult }}
+            </li>
+          </ul>
+        </div>
+        <button
           type="submit"
           class="submit"
           @click="submitGuess($event)"
@@ -39,6 +57,7 @@
 <!----------------------------------------Script-------------------------------------------------------------------->
 <script>
 import ResultScreen from "./ResultScreen.vue";
+import albums from "../assets/albums.json";
 // Imports and Data initialisation
 export default {
   name: "Vinyle-Component",
@@ -53,13 +72,16 @@ export default {
   },
   data() {
     return {
-      albumNameGuess: "",
       guessesRemaining: 6,
       pixelsize: 0.005,
       timerCount: 200,
       timerEnabled: false,
       previousGame: [],
       winsteak: 0,
+      resultVisible: false,
+      albumNameGuess: "",
+      albums: albums,
+      searchResults: [],
       // --------------- Result Screen Variables ------------ \\
       rsResult: "",
       rsAttempts: "",
@@ -172,7 +194,23 @@ export default {
       this.todayCompletedPixelationOff();
     },
   },
+
   methods: {
+    setAlbum(searchResult) {
+      this.albumNameGuess = searchResult;
+      this.resultVisible = false;
+    },
+    filterAlbums() {
+      if (this.albumNameGuess === "") {
+        this.searchResults = [];
+        return;
+      }
+      this.searchResults = this.albums.filter((album) => {
+        return album
+          .toLowerCase()
+          .startsWith(this.albumNameGuess.toLowerCase());
+      });
+    },
     // Change the display properties of the form elements
     changeFormDisplay(
       startDisplay,
@@ -188,6 +226,7 @@ export default {
     // Function to submit guess
     submitGuess(event) {
       event.preventDefault();
+      this.searchResults = [];
       // Check if guess is correct, if true, check the game type, if calendar, set today's stat to a win, and emit that the game is now completed
       if (
         this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase() ==
@@ -308,6 +347,44 @@ canvas {
   border-radius: 5px;
   border: 2px solid #242424;
 }
+form {
+  width: 100%;
+}
+ul {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  max-height: 100px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+::-webkit-scrollbar-track {
+  background: rgb(236, 236, 236);
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(42, 43, 42);
+  border-radius: 15px;
+}
+li {
+  border: none;
+  margin: 0;
+  padding: 5px;
+  width: 100%;
+  height: 25px;
+  text-align: left;
+  background-color: rgb(255, 255, 255);
+  color: #242424;
+}
+li:hover {
+  background-color: #242424;
+  color: #ffffff;
+  cursor: pointer;
+}
 #albumInput,
 #guessSubmit,
 #stop {
@@ -321,11 +398,11 @@ div.game-elements {
 }
 
 input {
-  width: 300px;
+  margin: 0;
+  width: 100%;
   height: 40px;
   font-size: 14px;
   font-weight: 600;
-  font-family: "Raleway", sans-serif;
 }
 #start {
   display: inline;

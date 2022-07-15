@@ -64,7 +64,7 @@ export default {
           this.albumName = res.data.name;
           this.gamemodeSelected = "today";
           this.todaysAlbum = this.albumName;
-          this.gameNumber = res.data.albumIndex;
+          this.gameNumber = toString(res.data.albumIndex);
           if (
             localStorage.getItem("todaysGame") == null ||
             localStorage.getItem("todaysGame") != this.albumName
@@ -94,7 +94,7 @@ export default {
         .then((res) => {
           this.albumName = res.data.name;
           this.gamemodeSelected = this.checkIfToday(date);
-          this.gameNumber = res.data.albumIndex;
+          this.gameNumber = toString(res.data.albumIndex);
           this.checkIfTodayCompleted(this.albumName);
         })
         .catch((err) => {
