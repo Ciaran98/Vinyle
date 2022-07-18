@@ -1,6 +1,6 @@
 <!----------------------------------------Template-------------------------------------------------------------------->
 <template>
-  <div>
+  <div class="vinyle-main">
     <ResultScreen
       :game-result="this.rsResult"
       :game-attempts="this.rsAttempts"
@@ -9,6 +9,7 @@
       :game-album-name-today="this.rsAlbumNameToday"
       :game-number="this.vinyleGameNumber"
     />
+
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
@@ -20,7 +21,7 @@
           v-model="albumNameGuess"
           :disabled="guessesRemaining == 0"
           id="albumInput"
-          placeholder="Search for an album..."
+          :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
           @input="filterAlbums"
           @focus="resultVisible = true"
         />
@@ -68,7 +69,7 @@ export default {
     vinyleCompletedToday: Boolean,
     vinyleIsToday: Boolean,
     vinyleTodaysAlbum: String,
-    vinyleGameNumber: String,
+    vinyleGameNumber: Number,
   },
   data() {
     return {
@@ -91,6 +92,7 @@ export default {
       // ----------------------------------------------------- \\
     };
   },
+  emits: ["update-completed-today"],
   // Timer method
   watch: {
     timerEnabled(value) {
@@ -106,9 +108,16 @@ export default {
           setTimeout(() => {
             this.timerCount -= 1;
           }, 100);
-          this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
+          this.pixelateImage(
+            (this.pixelsize +=
+              this.pixelsize === 1
+                ? 1
+                : 1 - Math.pow(1.0024, -10 * this.pixelsize))
+          );
+          //this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
         }
         if (value == 0) {
+          this.pixelateImage(1);
           this.changeFormDisplay("none", "none", "none", "none");
           let res = "";
           if (this.guessesRemaining > 0) {
@@ -235,7 +244,7 @@ export default {
         if (this.vinyleGameType == "today") {
           this.$emit("update-completed-today", true);
           localStorage.setItem("previousGamePlayed", [
-            this.vinyleName,
+            this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase(),
             (200 - this.timerCount) / 10,
             7 - this.guessesRemaining,
             "win",
@@ -341,6 +350,8 @@ export default {
     opacity: 1;
   }
 }
+div.vinyle-main {
+}
 canvas {
   height: 600px;
   width: 600px;
@@ -351,7 +362,7 @@ form {
   width: 100%;
 }
 ul {
-  width: 100%;
+  width: 400px;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
@@ -359,6 +370,7 @@ ul {
   margin: 0;
   padding: 0;
   list-style: none;
+  position: absolute;
 }
 ::-webkit-scrollbar {
   width: 0.5em;
@@ -374,7 +386,7 @@ li {
   border: none;
   margin: 0;
   padding: 5px;
-  width: 100%;
+  width: auto;
   height: 25px;
   text-align: left;
   background-color: rgb(255, 255, 255);

@@ -1,6 +1,24 @@
 <template>
-  <div class="home">
-    <div class="play-buttons">
+  <div id="infoModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" @click="closeModal">&times;</span>
+      <h1>How To Play</h1>
+      <p>
+        You have 6 guess attempts and 20 seconds to guess what the pixelated
+        album cover is. The timer is paused when making a guess.
+      </p>
+    </div>
+  </div>
+  <div class="home"></div>
+  <div class="play-buttons">
+    <div class="modal-container">
+      <img
+        src="../../public/info-lg.svg"
+        class="modal-button"
+        alt="information"
+        @click="openModal"
+      />
       <input
         id="vinyleCalendar"
         type="date"
@@ -42,7 +60,8 @@ export default {
       todayCompleted: false,
       isToday: false,
       todaysAlbum: "",
-      gameNumber: "",
+      gameNumber: 0,
+      modalToggled: false,
     };
   },
   mounted() {
@@ -64,7 +83,7 @@ export default {
           this.albumName = res.data.name;
           this.gamemodeSelected = "today";
           this.todaysAlbum = this.albumName;
-          this.gameNumber = toString(res.data.albumIndex);
+          this.gameNumber = res.data.albumIndex;
           if (
             localStorage.getItem("todaysGame") == null ||
             localStorage.getItem("todaysGame") != this.albumName
@@ -74,8 +93,12 @@ export default {
           if (localStorage.getItem("previousGamePlayed") != null) {
             if (
               localStorage.getItem("previousGamePlayed").split(",")[0] !=
-              this.todaysAlbum
+              this.todaysAlbum.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase()
             ) {
+              console.log(
+                localStorage.getItem("previousGamePlayed").split(",")[0],
+                this.todaysAlbum
+              );
               localStorage.removeItem("previousGamePlayed");
             }
           }
@@ -94,7 +117,7 @@ export default {
         .then((res) => {
           this.albumName = res.data.name;
           this.gamemodeSelected = this.checkIfToday(date);
-          this.gameNumber = toString(res.data.albumIndex);
+          this.gameNumber = res.data.albumIndex;
           this.checkIfTodayCompleted(this.albumName);
         })
         .catch((err) => {
@@ -120,7 +143,10 @@ export default {
         localStorage.getItem("todaysGame") != null
       ) {
         let prevGame = localStorage.getItem("previousGamePlayed").split(",");
-        let todayGame = localStorage.getItem("todaysGame");
+        let todayGame = localStorage
+          .getItem("todaysGame")
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLocaleLowerCase();
         if (prevGame[0] == todayGame) {
           this.todayCompleted = true;
         } else {
@@ -131,6 +157,12 @@ export default {
     updateCompleted(payload) {
       this.todayCompleted = payload;
     },
+    openModal() {
+      document.getElementById("infoModal").style.display = "block";
+    },
+    closeModal() {
+      document.getElementById("infoModal").style.display = "none";
+    },
   },
 };
 </script>
@@ -138,5 +170,14 @@ export default {
 <style scoped>
 div.play-buttons > * {
   margin: 20px;
+}
+img.modal-button {
+  width: 1em;
+  height: 1em;
+  font-size: 30px;
+  color: white;
+  vertical-align: sub;
+  filter: invert(100%) sepia(0%) saturate(7383%) hue-rotate(92deg)
+    brightness(112%) contrast(97%);
 }
 </style>

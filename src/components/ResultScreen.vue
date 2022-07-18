@@ -1,5 +1,7 @@
 <template>
-  <div v-if="gameResult == 'win' || gameResult == 'loss'"><Countdown /></div>
+  <div v-if="gameResult == 'win' || gameResult == 'loss'">
+    <Countdown />
+  </div>
 
   <Transition>
     <div class="game-result" v-if="gameResult == 'win'">
@@ -13,6 +15,7 @@
       </p>
     </div>
   </Transition>
+
   <Transition>
     <div class="game-result" v-if="gameResult == 'loss'">
       <h1 class="incorrect">Incorrect!</h1>
@@ -33,10 +36,20 @@
     <div v-if="gameResult == 'win' || gameResult == 'loss'">
       <button
         v-if="gameAlbumName == gameAlbumNameToday"
-        @click="copyToClipboard()"
+        @click="
+          openModal();
+          copyToClipboard();
+        "
       >
         Share Results
       </button>
+      <div id="resultsModal" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeModal">&times;</span>
+          <h1>Share Your Results!</h1>
+          <p>{{ shareString }}</p>
+        </div>
+      </div>
     </div>
   </Transition>
 </template>
@@ -50,10 +63,17 @@ export default {
     gameAttempts: String,
     gameAlbumName: String,
     gameAlbumNameToday: String,
-    gameNumber: String,
+    gameNumber: Number,
   },
+  watch: {},
   components: {
     Countdown,
+  },
+  data() {
+    return {
+      resultModalToggled: false,
+      shareString: "",
+    };
   },
   methods: {
     copyToClipboard() {
@@ -70,9 +90,13 @@ export default {
         squared += "🟥".repeat(this.gameAttempts);
         squared += "⬜".repeat(6 - this.gameAttempts);
       }
-      navigator.clipboard.writeText(
-        `Vinyle #${this.gameNumber} score: + ${squared}`
-      );
+      this.shareString = `Vinyle #${this.gameNumber} score: - ${squared}`;
+    },
+    openModal() {
+      document.getElementById("resultsModal").style.display = "block";
+    },
+    closeModal() {
+      document.getElementById("resultsModal").style.display = "none";
     },
   },
 };
