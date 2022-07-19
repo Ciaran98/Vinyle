@@ -13,12 +13,8 @@
   <div class="home"></div>
   <div class="play-buttons">
     <div class="modal-container">
-      <img
-        src="../../public/info-lg.svg"
-        class="modal-button"
-        alt="information"
-        @click="openModal"
-      />
+      <button class="modal-button" @click="openModal">How to play</button>
+
       <input
         id="vinyleCalendar"
         type="date"
@@ -171,13 +167,7 @@ export default {
 div.play-buttons > * {
   margin: 20px;
 }
-img.modal-button {
-  width: 1em;
-  height: 1em;
-  font-size: 30px;
-  color: white;
-  vertical-align: sub;
-  filter: invert(100%) sepia(0%) saturate(7383%) hue-rotate(92deg)
-    brightness(112%) contrast(97%);
+.modal-button {
+  width: 150px !important;
 }
 </style>
