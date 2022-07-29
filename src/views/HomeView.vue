@@ -13,7 +13,7 @@
   <div class="home"></div>
   <div class="play-buttons">
     <div class="modal-container">
-      <button class="modal-button" @click="openModal">How to play</button>
+      <button class="modal-button" @click="openModal">How to play</button><br />
 
       <input
         id="vinyleCalendar"
