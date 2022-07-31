@@ -117,7 +117,7 @@ button {
   height: 50px;
   font-size: 20px;
   border: 2px solid white;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
   margin: 10px;
   font-family: "Raleway", sans-serif;
@@ -135,7 +135,12 @@ button:disabled {
   transition: background-color 0.2s;
   background-color: crimson;
 }
-
+button.how-to-play {
+  background-color: purple;
+}
+button.how-to-play:hover {
+  background-color: black;
+}
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -147,8 +152,16 @@ button:disabled {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  animation: modalopen 0.5s;
 }
-
+@keyframes modalopen {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* Modal Content/Box */
 .modal-content {
   background-color: #1f1f20;

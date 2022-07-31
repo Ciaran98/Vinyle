@@ -1,7 +1,7 @@
 <template>
   <div id="infoModal" class="modal">
     <!-- Modal content -->
-    <div class="modal-content">
+    <div class="modal-content" id="contentModal">
       <span class="close" @click="closeModal">&times;</span>
       <h1>How To Play</h1>
       <p>
@@ -10,10 +10,12 @@
       </p>
     </div>
   </div>
-  <div class="home"></div>
+
   <div class="play-buttons">
     <div class="modal-container">
-      <button class="modal-button" @click="openModal">How to play</button><br />
+      <button class="modal-button how-to-play" @click="openModal">
+        How to play</button
+      ><br />
 
       <input
         id="vinyleCalendar"
@@ -164,6 +166,28 @@ export default {
 </script>
 
 <style scoped>
+@keyframes openmodal {
+  100% {
+    opacity: 0;
+  }
+  0% {
+    opacity: 1;
+  }
+}
+@keyframes closemodal {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.play-anim {
+  animation: openmodal 1s linear 0 1 normal forwards;
+}
+.reverse-anim {
+  animation: closemodal 1s linear 0 1 normal forwards;
+}
 div.play-buttons > * {
   margin: 20px;
 }

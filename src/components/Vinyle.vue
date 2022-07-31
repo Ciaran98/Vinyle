@@ -350,8 +350,7 @@ export default {
     opacity: 1;
   }
 }
-div.vinyle-main {
-}
+
 canvas {
   height: 600px;
   width: 600px;
