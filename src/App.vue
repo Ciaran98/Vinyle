@@ -125,21 +125,19 @@ button {
   font-size: 20px;
   font-weight: 600;
   color: white;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 button:enabled:hover {
-  transition: background-color 0.2s;
   background-color: rgb(0, 126, 0);
 }
 button:disabled {
-  transition: background-color 0.2s;
   background-color: crimson;
 }
 button.how-to-play {
-  background-color: purple;
+  background-color: rgb(141, 55, 101);
 }
 button.how-to-play:hover {
-  background-color: black;
+  background-color: rgb(95, 41, 70);
 }
 .modal {
   display: none; /* Hidden by default */
@@ -152,16 +150,9 @@ button.how-to-play:hover {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  animation: modalopen 0.5s;
+  animation: modalfade 0.5s;
 }
-@keyframes modalopen {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+
 /* Modal Content/Box */
 .modal-content {
   background-color: #1f1f20;
@@ -171,20 +162,44 @@ button.how-to-play:hover {
   border-radius: 15px;
   width: 80%; /* Could be more or less, depending on screen size */
   max-width: 600px;
+  animation: modalopen 0.5s;
 }
-
+@keyframes modalopen {
+  from {
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@keyframes modalfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* The Close Button */
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
+  padding: 5px 15px;
+  border-radius: 25px;
+  border: 2px solid #aaa;
+  transition: all 300ms;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: red;
   text-decoration: none;
   cursor: pointer;
+  border-color: red;
+  transition: all 300ms;
 }
 </style>

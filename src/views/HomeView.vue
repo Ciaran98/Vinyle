@@ -4,26 +4,28 @@
     <div class="modal-content" id="contentModal">
       <span class="close" @click="closeModal">&times;</span>
       <h1>How To Play</h1>
+      <hr />
+      <h2>Welcome to Vinyle!</h2>
       <p>
-        You have 6 guess attempts and 20 seconds to guess what the pixelated
-        album cover is. The timer is paused when making a guess.
+        At the beginning of the game, you are given a pixelated album cover, and
+        you have to guess the name of the album. You need to be careful, you
+        only have 6 guess attempts, or 20 seconds to guess the name of the
+        album. If the timer reaches 0, or you run out of guesses, you lose. If
+        you successfully guess the album, you can share your results!
       </p>
     </div>
   </div>
 
   <div class="play-buttons">
-    <div class="modal-container">
-      <button class="modal-button how-to-play" @click="openModal">
-        How to play</button
-      ><br />
-
-      <input
-        id="vinyleCalendar"
-        type="date"
-        min="2022-07-07"
-        @change="selectDate($event)"
-      />
-    </div>
+    <button class="modal-button how-to-play" @click="openModal">
+      How to play</button
+    ><br />
+    <input
+      id="vinyleCalendar"
+      type="date"
+      min="2022-07-07"
+      @change="selectDate($event)"
+    />
     <Vinyle
       :vinyle-name="this.albumName"
       :vinyle-game-type="this.gamemodeSelected"
@@ -166,22 +168,6 @@ export default {
 </script>
 
 <style scoped>
-@keyframes openmodal {
-  100% {
-    opacity: 0;
-  }
-  0% {
-    opacity: 1;
-  }
-}
-@keyframes closemodal {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
 .play-anim {
   animation: openmodal 1s linear 0 1 normal forwards;
 }
