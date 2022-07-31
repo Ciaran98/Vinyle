@@ -64,18 +64,4 @@ div > span {
     font-size: 50px;
   }
 }
-.v-enter-active {
-  animation: fade-in 0.3s;
-}
-.v-leave-active {
-  animation: fade-in 0.4s reverse;
-}
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 </style>

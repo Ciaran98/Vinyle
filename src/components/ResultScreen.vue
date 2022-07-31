@@ -47,7 +47,9 @@
         <div class="modal-content">
           <span class="close" @click="closeModal">&times;</span>
           <h1>Share Your Results!</h1>
-          <p>{{ shareString }}</p>
+          <p>Copy the results below, and share them on social media!</p>
+          <hr />
+          <p class="share">{{ shareString }}</p>
         </div>
       </div>
     </div>
@@ -90,7 +92,7 @@ export default {
         squared += "🟥".repeat(this.gameAttempts);
         squared += "⬜".repeat(6 - this.gameAttempts);
       }
-      this.shareString = `Vinyle #${this.gameNumber} score: - ${squared}`;
+      this.shareString = `Vinyle #${this.gameNumber}: - ${squared}`;
     },
     openModal() {
       document.getElementById("resultsModal").style.display = "block";
@@ -132,9 +134,6 @@ h1 {
 .v-enter-active {
   animation: fade-in 0.3s;
 }
-.v-leave-active {
-  animation: fade-in 0.3s reverse;
-}
 @media (max-width: 768px) {
   div.game-result {
     font-size: 14px;
@@ -146,6 +145,7 @@ h1 {
 @keyframes fade-in {
   0% {
     opacity: 0;
+    transform: translateY(-100px);
   }
   100% {
     opacity: 1;
@@ -153,5 +153,14 @@ h1 {
 }
 button {
   width: 150px;
+}
+.share {
+  background-color: rgb(241, 241, 241);
+  padding: 20px;
+  border: 2px solid rgb(27, 27, 27);
+  border-radius: 15px;
+  color: rgb(27, 27, 27);
+  font-weight: bold;
+  font-size: 25px;
 }
 </style>

@@ -342,15 +342,6 @@ export default {
 <!----------------------------------------End of script------------------------------------------------------------>
 <!----------------------------------------Style-------------------------------------------------------------------->
 <style scoped>
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 canvas {
   height: 600px;
   width: 600px;
@@ -361,7 +352,7 @@ form {
   width: 100%;
 }
 ul {
-  width: 400px;
+  max-width: 400px;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
@@ -385,7 +376,7 @@ li {
   border: none;
   margin: 0;
   padding: 5px;
-  width: auto;
+  width: 400px;
   height: 25px;
   text-align: left;
   background-color: rgb(255, 255, 255);
