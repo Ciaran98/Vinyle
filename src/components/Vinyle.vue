@@ -25,6 +25,7 @@
             :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
             @input="filterAlbums"
             @focus="resultVisible = true"
+            @click="resultVisible = true"
           />
           <div style="all: unset" v-if="resultVisible">
             <ul>
