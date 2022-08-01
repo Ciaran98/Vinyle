@@ -15,35 +15,36 @@
     </div>
     <div class="game-elements">
       <form>
-        <input
-          type="text"
-          autocomplete="off"
-          v-model="albumNameGuess"
-          :disabled="guessesRemaining == 0"
-          id="albumInput"
-          :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
-          @input="filterAlbums"
-          @focus="resultVisible = true"
-        />
-        <div
-          style="all: unset"
-          v-if="searchResults.length > 0 && resultVisible"
-        >
-          <ul>
-            <li
-              v-for="searchResult in searchResults"
-              :key="searchResult"
-              @click="setAlbum(searchResult)"
-            >
-              {{ searchResult }}
-            </li>
-          </ul>
+        <div class="input-wrapper">
+          <input
+            type="text"
+            autocomplete="off"
+            v-model="albumNameGuess"
+            :disabled="guessesRemaining == 0"
+            id="albumInput"
+            :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
+            @input="filterAlbums"
+            @focus="resultVisible = true"
+          />
+          <div
+            style="all: unset"
+            v-if="searchResults.length > 0 && resultVisible"
+          >
+            <ul>
+              <li
+                v-for="searchResult in searchResults"
+                :key="searchResult"
+                @click="setAlbum(searchResult)"
+              >
+                {{ searchResult }}
+              </li>
+            </ul>
+          </div>
         </div>
         <button
           type="submit"
           class="submit"
           @click="submitGuess($event)"
-          :disabled="!albumNameGuess"
           id="guessSubmit"
         >
           Guess
@@ -351,16 +352,8 @@ canvas {
 form {
   width: 100%;
 }
-ul {
-  max-width: 400px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: auto;
-  max-height: 100px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: absolute;
+.input-wrapper {
+  width: 100%;
 }
 ::-webkit-scrollbar {
   width: 0.5em;
@@ -372,15 +365,39 @@ ul {
   background: rgb(42, 43, 42);
   border-radius: 15px;
 }
-li {
-  border: none;
+ul {
   margin: 0;
-  padding: 5px;
-  width: 400px;
-  height: 25px;
-  text-align: left;
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  max-height: 100px;
+  list-style: none;
+  position: absolute;
+  border-radius: 5px;
+  max-width: 30ch;
+  width: 100%;
+}
+li {
   background-color: rgb(255, 255, 255);
+  padding: 5px;
+  margin: 0;
+  border: none;
+  width: 100%;
+  text-align: left;
+
   color: #242424;
+  font-size: 14px;
+  font-weight: 600;
+  height: 25px;
+}
+input {
+  margin: 0;
+  width: 100%;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
 }
 li:hover {
   background-color: #242424;
@@ -393,19 +410,11 @@ li:hover {
   display: none;
 }
 div.game-elements {
-  padding: 20px;
   max-width: 400px;
   min-height: 100px;
   margin: auto;
 }
 
-input {
-  margin: 0;
-  width: 100%;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 600;
-}
 #start {
   display: inline;
 }

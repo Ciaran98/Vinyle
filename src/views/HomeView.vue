@@ -180,4 +180,7 @@ div.play-buttons > * {
 .modal-button {
   width: 150px !important;
 }
+div.play-buttons {
+  padding-bottom: 60px;
+}
 </style>
