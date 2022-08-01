@@ -24,7 +24,7 @@
             id="albumInput"
             :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
             @input="
-              ((evt) => (albumNameGuess = evt.target.value), filterAlbums)
+              ((evt) => (this.albumNameGuess = evt.target.value), filterAlbums)
             "
             @focus="resultVisible = true"
             @click="resultVisible = true"
