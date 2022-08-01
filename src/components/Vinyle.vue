@@ -351,6 +351,7 @@ form {
 }
 .input-wrapper {
   width: 100%;
+  position: relative;
 }
 ::-webkit-scrollbar {
   width: 0.5em;
@@ -370,10 +371,9 @@ ul {
   height: auto;
   max-height: 100px;
   list-style: none;
-  position: absolute;
   border-radius: 5px;
-  max-width: 30ch;
   width: 100%;
+  position: absolute;
 }
 li {
   background-color: rgb(255, 255, 255);
@@ -388,13 +388,13 @@ li {
   font-weight: 600;
   height: 25px;
 }
+
 input {
   margin: 0;
   width: 100%;
   height: 40px;
   font-size: 14px;
   font-weight: 600;
-  position: relative;
 }
 li:hover {
   background-color: #242424;
