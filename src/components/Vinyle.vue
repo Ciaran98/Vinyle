@@ -19,11 +19,13 @@
           <input
             type="text"
             autocomplete="off"
-            v-model="albumNameGuess"
             :disabled="guessesRemaining == 0"
             id="albumInput"
             :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
-            @input="filterAlbums"
+            @input="
+              filterAlbums;
+              (evt) => (this.albumNameGuess = evt.target.value);
+            "
             @focus="resultVisible = true"
             @click="resultVisible = true"
           />
