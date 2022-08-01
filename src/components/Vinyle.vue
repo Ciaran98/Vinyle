@@ -26,10 +26,7 @@
             @input="filterAlbums"
             @focus="resultVisible = true"
           />
-          <div
-            style="all: unset"
-            v-if="searchResults.length > 0 && resultVisible"
-          >
+          <div style="all: unset" v-if="resultVisible">
             <ul>
               <li
                 v-for="searchResult in searchResults"
