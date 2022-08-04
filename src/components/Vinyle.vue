@@ -144,7 +144,7 @@ export default {
         }
         if (value == 0) {
           this.pixelateImage(1);
-          this.changeFormDisplay("none", "none");
+          this.changeFormDisplay("none", "none", "none", "none");
           let res = "";
           if (this.guessesRemaining > 0) {
             res = "timeout";
@@ -221,10 +221,10 @@ export default {
           this.previousGame[2],
           this.previousGame[1]
         );
-        this.changeFormDisplay("none", "none");
+        this.changeFormDisplay("none", "none", "none", "none");
       } else {
         this.setResults("none", "0", "0");
-        this.changeFormDisplay("inline", "none");
+        this.changeFormDisplay("inline", "none", "inline", "inline");
       }
       this.todayCompletedPixelationOff();
     },
@@ -247,9 +247,11 @@ export default {
       });
     },
     // Change the display properties of the form elements
-    changeFormDisplay(startDisplay, stopDisplay) {
+    changeFormDisplay(startDisplay, stopDisplay, inputDisplay, submitDisplay) {
       document.getElementById("start").style.display = startDisplay;
       document.getElementById("stop").style.display = stopDisplay;
+      document.getElementById("albumInput").style.display = inputDisplay;
+      document.getElementById("guessSubmit").style.display = submitDisplay;
     },
     // Function to submit guess
     submitGuess(event) {
@@ -278,15 +280,15 @@ export default {
         // Preparethe results as props for the result screen component
         // Set completed game to true, the timer to zero, unpixelate the image
         this.pixelateImage(1);
-        this.changeFormDisplay("none", "none");
+        this.changeFormDisplay("none", "none", "none", "none");
       } else {
         this.guessesRemaining--;
-        this.changeFormDisplay("inline", "none");
+        this.changeFormDisplay("inline", "none", "inline", "inline");
       }
       if (this.guessesRemaining == 0) {
         this.timerCount = 0;
         this.pixelateImage(1);
-        this.changeFormDisplay("none", "none");
+        this.changeFormDisplay("none", "none", "none", "none");
       }
       this.albumNameGuess = "";
     },
@@ -317,12 +319,12 @@ export default {
     // Start the timer
     play() {
       this.timerEnabled = true;
-      this.changeFormDisplay("none", "inline");
+      this.changeFormDisplay("none", "inline", "inline", "inline");
     },
     pause() {
       // Pause the timer
       this.timerEnabled = false;
-      this.changeFormDisplay("inline", "none");
+      this.changeFormDisplay("inline", "none", "inline", "inline");
     },
     todayCompletedPixelationOff() {
       if (
