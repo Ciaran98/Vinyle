@@ -119,7 +119,7 @@ button {
   border: 2px solid white;
   border-radius: 25px;
   cursor: pointer;
-  margin: 10px;
+  margin: 20px;
   font-family: "Raleway", sans-serif;
   background-color: rgb(0, 206, 0);
   font-size: 20px;
@@ -129,9 +129,6 @@ button {
 }
 button:enabled:hover {
   background-color: rgb(0, 126, 0);
-}
-button:disabled {
-  background-color: crimson;
 }
 button.how-to-play {
   background-color: rgb(141, 55, 101);

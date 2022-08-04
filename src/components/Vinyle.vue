@@ -41,6 +41,34 @@
             </ul>
           </div>
         </div>
+        <button class="play" @click="play()" id="start">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-play-fill icon"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+            />
+          </svg>
+        </button>
+        <button class="play" @click="pause()" id="stop">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-pause-fill icon"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"
+            />
+          </svg>
+        </button>
         <button
           type="submit"
           class="submit"
@@ -50,8 +78,6 @@
           Guess
         </button>
       </form>
-      <button class="play" @click="play()" id="start">Start</button>
-      <button class="play" @click="pause()" id="stop">Stop</button>
     </div>
   </div>
 </template>
@@ -115,11 +141,10 @@ export default {
                 ? 1
                 : 1 - Math.pow(1.0024, -10 * this.pixelsize))
           );
-          //this.pixelateImage((this.pixelsize += this.pixelsize / 38.2));
         }
         if (value == 0) {
           this.pixelateImage(1);
-          this.changeFormDisplay("none", "none", "none", "none");
+          this.changeFormDisplay("none", "none");
           let res = "";
           if (this.guessesRemaining > 0) {
             res = "timeout";
@@ -196,10 +221,10 @@ export default {
           this.previousGame[2],
           this.previousGame[1]
         );
-        this.changeFormDisplay("none", "none", "none", "none");
+        this.changeFormDisplay("none", "none");
       } else {
         this.setResults("none", "0", "0");
-        this.changeFormDisplay("inline", "none", "none", "none");
+        this.changeFormDisplay("inline", "none");
       }
       this.todayCompletedPixelationOff();
     },
@@ -222,16 +247,9 @@ export default {
       });
     },
     // Change the display properties of the form elements
-    changeFormDisplay(
-      startDisplay,
-      stopDisplay,
-      submitGuessDisplay,
-      inputDisplay
-    ) {
+    changeFormDisplay(startDisplay, stopDisplay) {
       document.getElementById("start").style.display = startDisplay;
       document.getElementById("stop").style.display = stopDisplay;
-      document.getElementById("guessSubmit").style.display = submitGuessDisplay;
-      document.getElementById("albumInput").style.display = inputDisplay;
     },
     // Function to submit guess
     submitGuess(event) {
@@ -260,15 +278,15 @@ export default {
         // Preparethe results as props for the result screen component
         // Set completed game to true, the timer to zero, unpixelate the image
         this.pixelateImage(1);
-        this.changeFormDisplay("none", "none", "none", "none");
+        this.changeFormDisplay("none", "none");
       } else {
         this.guessesRemaining--;
-        this.changeFormDisplay("inline", "none", "none", "none");
+        this.changeFormDisplay("inline", "none");
       }
       if (this.guessesRemaining == 0) {
         this.timerCount = 0;
         this.pixelateImage(1);
-        this.changeFormDisplay("none", "none", "none", "none");
+        this.changeFormDisplay("none", "none");
       }
       this.albumNameGuess = "";
     },
@@ -299,12 +317,12 @@ export default {
     // Start the timer
     play() {
       this.timerEnabled = true;
-      this.changeFormDisplay("none", "inline", "none", "none");
+      this.changeFormDisplay("none", "inline");
     },
     pause() {
       // Pause the timer
       this.timerEnabled = false;
-      this.changeFormDisplay("none", "none", "inline", "inline");
+      this.changeFormDisplay("inline", "none");
     },
     todayCompletedPixelationOff() {
       if (
@@ -343,6 +361,17 @@ export default {
 <!----------------------------------------End of script------------------------------------------------------------>
 <!----------------------------------------Style-------------------------------------------------------------------->
 <style scoped>
+.icon {
+  font-size: 200px;
+}
+#stop {
+  display: none;
+}
+button.play,
+button.pause {
+  width: 50px;
+  height: 50px;
+}
 canvas {
   height: 600px;
   width: 600px;
@@ -385,7 +414,6 @@ li {
   border: none;
   width: 100%;
   text-align: left;
-
   color: #242424;
   font-size: 14px;
   font-weight: 600;
@@ -404,11 +432,7 @@ li:hover {
   color: #ffffff;
   cursor: pointer;
 }
-#albumInput,
-#guessSubmit,
-#stop {
-  display: none;
-}
+
 div.game-elements {
   max-width: 400px;
   min-height: 100px;
