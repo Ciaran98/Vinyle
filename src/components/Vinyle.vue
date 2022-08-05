@@ -142,19 +142,13 @@ export default {
         if (value == 0) {
           this.pixelateImage(1);
           this.changeFormDisplay("none", "none", "none", "none");
-          let res = "";
-          if (this.guessesRemaining > 0) {
-            res = "timeout";
-          } else {
-            res = "loss";
-          }
-          this.setResults(res, String(7 - this.guessesRemaining), "0");
+          this.setResults("timeout", String(6 - this.guessesRemaining), "20");
           if (this.vinyleName == this.vinyleTodaysAlbum) {
             localStorage.setItem("previousGamePlayed", [
               this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase(),
-              (200 - this.timerCount) / 10,
-              7 - this.guessesRemaining,
-              res,
+              "20",
+              6 - this.guessesRemaining,
+              "timeout",
             ]);
           }
         }
@@ -186,6 +180,23 @@ export default {
             iterations: 2,
           }
         );
+      }
+      if (this.guessesRemaining == 0) {
+        this.pixelateImage(1);
+        this.changeFormDisplay("none", "none", "none", "none");
+        this.setResults(
+          "loss",
+          String(6 - this.guessesRemaining),
+          String((200 - this.timerCount) / 10)
+        );
+        if (this.vinyleName == this.vinyleTodaysAlbum) {
+          localStorage.setItem("previousGamePlayed", [
+            this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase(),
+            (200 - this.timerCount) / 10,
+            6 - this.guessesRemaining,
+            "loss",
+          ]);
+        }
       }
     },
     vinyleName: function () {
@@ -264,6 +275,7 @@ export default {
         this.albumNameGuess.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase()
       ) {
         if (this.vinyleGameType == "today") {
+          this.timerEnabled = false;
           this.$emit("update-completed-today", true);
           localStorage.setItem("previousGamePlayed", [
             this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase(),
@@ -271,6 +283,7 @@ export default {
             7 - this.guessesRemaining,
             "win",
           ]);
+
           this.getPreviouslyCompletedGame();
         }
         this.setResults(
@@ -285,11 +298,6 @@ export default {
       } else {
         this.guessesRemaining--;
         this.changeFormDisplay("inline", "none", "inline", "inline");
-      }
-      if (this.guessesRemaining == 0) {
-        this.timerCount = 0;
-        this.pixelateImage(1);
-        this.changeFormDisplay("none", "none", "none", "none");
       }
       this.albumNameGuess = "";
     },

@@ -96,7 +96,7 @@ export default {
         squared += "🟥".repeat(this.gameAttempts);
         squared += "⬜".repeat(6 - this.gameAttempts);
       }
-      this.shareString = `Vinyle #${this.gameNumber}: - ${squared} Time Remaining: ${this.gameTime} Attempts: ${this.gameAttempts}`;
+      this.shareString = `Vinyle #${this.gameNumber}: - ${squared} Time: ${this.gameTime}s Attempts: ${this.gameAttempts}`;
     },
     openModal() {
       document.getElementById("resultsModal").style.display = "block";
