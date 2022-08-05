@@ -68,6 +68,7 @@
         <button
           type="submit"
           class="submit"
+          :disabled="this.albumNameGuess.length == 0"
           @click="submitGuess($event)"
           id="guessSubmit"
         >

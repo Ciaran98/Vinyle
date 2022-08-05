@@ -127,6 +127,9 @@ button {
   color: white;
   transition: all 0.2s;
 }
+button:disabled {
+  background-color: red;
+}
 button:enabled:hover {
   background-color: rgb(0, 126, 0);
 }
