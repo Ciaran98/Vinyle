@@ -9,7 +9,6 @@
       :game-album-name-today="this.rsAlbumNameToday"
       :game-number="this.vinyleGameNumber"
     />
-
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
@@ -19,15 +18,12 @@
           <input
             type="text"
             autocomplete="off"
-            v-model="albumNameGuess"
             :disabled="guessesRemaining == 0"
             id="albumInput"
+            :value="this.albumNameGuess"
             :placeholder="this.guessesRemaining + ' Guesses Remaining...'"
-            @input="
-              ((evt) => (this.albumNameGuess = evt.target.value), filterAlbums)
-            "
+            @input="filterAlbums"
             @focus="resultVisible = true"
-            @click="resultVisible = true"
           />
           <div style="all: unset" v-if="resultVisible">
             <ul>
@@ -154,7 +150,7 @@ export default {
           this.setResults(res, String(7 - this.guessesRemaining), "0");
           if (this.vinyleName == this.vinyleTodaysAlbum) {
             localStorage.setItem("previousGamePlayed", [
-              this.vinyleName,
+              this.vinyleName.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase(),
               (200 - this.timerCount) / 10,
               7 - this.guessesRemaining,
               res,
@@ -235,7 +231,11 @@ export default {
       this.albumNameGuess = searchResult;
       this.resultVisible = false;
     },
-    filterAlbums() {
+    beep() {
+      console.log("beep");
+    },
+    filterAlbums(e) {
+      this.albumNameGuess = e.target.value;
       if (this.albumNameGuess === "") {
         this.searchResults = [];
         return;
@@ -427,7 +427,7 @@ input {
   width: 100%;
   height: 40px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
 }
 li:hover {
   background-color: #242424;

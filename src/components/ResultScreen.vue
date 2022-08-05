@@ -19,7 +19,7 @@
   <Transition>
     <div class="game-result" v-if="gameResult == 'loss'">
       <h1 class="incorrect">Incorrect!</h1>
-      <p>You lost</p>
+      <p>Unfortunately you did not guess correctly, better luck next time!</p>
     </div>
   </Transition>
   <Transition>
@@ -33,7 +33,11 @@
     </div>
   </Transition>
   <Transition>
-    <div v-if="gameResult == 'win' || gameResult == 'loss'">
+    <div
+      v-if="
+        gameResult == 'win' || gameResult == 'loss' || gameResult == 'timeout'
+      "
+    >
       <button
         v-if="gameAlbumName == gameAlbumNameToday"
         @click="
@@ -92,7 +96,7 @@ export default {
         squared += "🟥".repeat(this.gameAttempts);
         squared += "⬜".repeat(6 - this.gameAttempts);
       }
-      this.shareString = `Vinyle #${this.gameNumber}: - ${squared}`;
+      this.shareString = `Vinyle #${this.gameNumber}: - ${squared} Time Remaining: ${this.gameTime} Attempts: ${this.gameAttempts}`;
     },
     openModal() {
       document.getElementById("resultsModal").style.display = "block";
@@ -161,6 +165,6 @@ button {
   border-radius: 15px;
   color: rgb(27, 27, 27);
   font-weight: bold;
-  font-size: 25px;
+  font-size: 17px;
 }
 </style>

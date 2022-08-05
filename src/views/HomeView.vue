@@ -92,13 +92,13 @@ export default {
           }
           if (localStorage.getItem("previousGamePlayed") != null) {
             if (
-              localStorage.getItem("previousGamePlayed").split(",")[0] !=
+              localStorage
+                .getItem("previousGamePlayed")
+                .split(",")[0]
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toLocaleLowerCase() !=
               this.todaysAlbum.replace(/[^a-zA-Z0-9]/g, "").toLocaleLowerCase()
             ) {
-              console.log(
-                localStorage.getItem("previousGamePlayed").split(",")[0],
-                this.todaysAlbum
-              );
               localStorage.removeItem("previousGamePlayed");
             }
           }
