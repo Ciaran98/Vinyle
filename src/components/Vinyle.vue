@@ -268,6 +268,7 @@ export default {
     },
     // Function to submit guess
     submitGuess(event) {
+      this.timerEnabled = false;
       event.preventDefault();
       this.searchResults = [];
       // Check if guess is correct, if true, check the game type, if calendar, set today's stat to a win, and emit that the game is now completed
