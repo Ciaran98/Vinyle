@@ -12,6 +12,7 @@
     <div id="game-area">
       <canvas id="canvas" width="600" height="600"></canvas>
     </div>
+    <br />
     <div class="game-elements">
       <form>
         <div class="input-wrapper">
