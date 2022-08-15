@@ -73,6 +73,8 @@ export default {
       .split("T")[0];
 
     // Initialise the site with today's game of vinyle
+  },
+  created() {
     this.selectToday();
   },
   methods: {

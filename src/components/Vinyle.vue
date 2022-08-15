@@ -38,7 +38,7 @@
             </ul>
           </div>
         </div>
-        <button class="play" @click="play()" id="start">
+        <button class="play" @click="play()" id="start" type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -52,7 +52,7 @@
             />
           </svg>
         </button>
-        <button class="play" @click="pause()" id="stop">
+        <button class="play" @click="pause()" id="stop" type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
