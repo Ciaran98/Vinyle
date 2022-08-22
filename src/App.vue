@@ -85,12 +85,15 @@ export default {};
 body {
   color: #ffffff;
   background-color: #1f1f20;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
 }
 h1.header {
   padding: 0;
   margin: 0;
   font-family: "Dancing Script", cursive;
-  font-size: 200px;
+  font-size: 150px;
   cursor: default;
 }
 #app {
@@ -99,22 +102,16 @@ h1.header {
   text-align: center;
   font-family: "Raleway", sans-serif;
 }
-img {
-  width: 600px;
-  image-rendering: high-quality;
-}
+
 @media (max-width: 768px) {
-  img {
-    width: 250px;
-  }
   h1.header {
     font-size: 100px;
   }
 }
 
 button {
-  width: 100px;
-  height: 50px;
+  width: 80px;
+  height: 40px;
   font-size: 20px;
   border: 2px solid white;
   border-radius: 25px;

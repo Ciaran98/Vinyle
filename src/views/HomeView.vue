@@ -177,7 +177,7 @@ export default {
   animation: closemodal 1s linear 0 1 normal forwards;
 }
 div.play-buttons > * {
-  margin: 20px;
+  margin: 10px;
 }
 .modal-button {
   width: 150px !important;

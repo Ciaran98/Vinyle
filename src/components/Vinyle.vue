@@ -382,12 +382,12 @@ export default {
 }
 button.play,
 button.pause {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 canvas {
-  height: 600px;
-  width: 600px;
+  height: 400px;
+  width: 400px;
   border-radius: 5px;
   border: 2px solid #242424;
 }
@@ -435,7 +435,7 @@ li {
 
 input {
   margin: 0;
-  width: 100%;
+  width: 98%;
   height: 40px;
   font-size: 14px;
   font-weight: 400;
@@ -445,9 +445,8 @@ li:hover {
   color: #ffffff;
   cursor: pointer;
 }
-
 div.game-elements {
-  max-width: 400px;
+  max-width: 350px;
   min-height: 100px;
   margin: auto;
 }
