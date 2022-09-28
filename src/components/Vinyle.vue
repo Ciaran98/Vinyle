@@ -1,6 +1,11 @@
 <!----------------------------------------Template-------------------------------------------------------------------->
 <template>
   <div class="vinyle-main">
+    <div class="main-wrapper">
+
+    <div id="game-area">
+      <canvas id="canvas" width="600" height="600"></canvas>
+    </div>
     <ResultScreen
       :game-result="this.rsResult"
       :game-attempts="this.rsAttempts"
@@ -9,10 +14,7 @@
       :game-album-name-today="this.rsAlbumNameToday"
       :game-number="this.vinyleGameNumber"
     />
-    <div id="game-area">
-      <canvas id="canvas" width="600" height="600"></canvas>
-    </div>
-    <br />
+  </div>
     <div class="game-elements">
       <form>
         <div class="input-wrapper">
@@ -38,45 +40,26 @@
             </ul>
           </div>
         </div>
-        <button class="play" @click="play()" id="start" type="button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-play-fill icon"
-            viewBox="0 0 16 16"
+        <div class="button-wrapper">
+          <button class="play" @click="play()" id="start" type="button">
+            Play
+          </button>
+          <button class="play" @click="pause()" id="stop" type="button">
+            Pause
+          </button>
+          <button
+            type="submit"
+            class="submit"
+            :disabled="this.albumNameGuess.length == 0"
+            @click="submitGuess($event)"
+            id="guessSubmit"
           >
-            <path
-              d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-            />
-          </svg>
-        </button>
-        <button class="play" @click="pause()" id="stop" type="button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-pause-fill icon"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"
-            />
-          </svg>
-        </button>
-        <button
-          type="submit"
-          class="submit"
-          :disabled="this.albumNameGuess.length == 0"
-          @click="submitGuess($event)"
-          id="guessSubmit"
-        >
-          Guess
-        </button>
+            Guess
+          </button>
+        </div>
       </form>
     </div>
+
   </div>
 </template>
 <!----------------------------------------End of Template----------------------------------------------------------->
@@ -380,10 +363,16 @@ export default {
 #stop {
   display: none;
 }
-button.play,
-button.pause {
-  width: 40px;
-  height: 40px;
+.main-wrapper{
+  display: flex;
+  flex-flow:row;
+  justify-content: center;
+  gap:20px
+}
+.button-wrapper{
+  display: flex;
+  flex-flow:row;
+  justify-content: space-between;
 }
 canvas {
   height: 400px;
@@ -447,7 +436,6 @@ li:hover {
 }
 div.game-elements {
   max-width: 350px;
-  min-height: 100px;
   margin: auto;
 }
 
@@ -458,6 +446,9 @@ div.game-elements {
   canvas {
     height: 300px;
     width: 300px;
+  }
+  .main-wrapper{
+    flex-direction: column-reverse;
   }
 }
 </style>

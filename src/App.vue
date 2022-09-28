@@ -110,16 +110,15 @@ h1.header {
 }
 
 button {
-  width: 80px;
+  width: 120px;
   height: 40px;
-  font-size: 20px;
-  border: 2px solid white;
-  border-radius: 25px;
+  font-size: 16px;
+  border:none;
+  border-radius: 15px;
   cursor: pointer;
-  margin: 20px;
+  margin: 10px;
   font-family: "Raleway", sans-serif;
   background-color: rgb(0, 206, 0);
-  font-size: 20px;
   font-weight: 600;
   color: white;
   transition: all 0.2s;
@@ -131,10 +130,11 @@ button:enabled:hover {
   background-color: rgb(0, 126, 0);
 }
 button.how-to-play {
-  background-color: rgb(141, 55, 101);
+  background-color: rgb(71, 137, 199);
+  border-radius: 25px;
 }
 button.how-to-play:hover {
-  background-color: rgb(95, 41, 70);
+  background-color: rgb(55, 99, 141);
 }
 .modal {
   display: none; /* Hidden by default */
@@ -152,22 +152,19 @@ button.how-to-play:hover {
 
 /* Modal Content/Box */
 .modal-content {
+  position: relative;
   background-color: #1f1f20;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 2px solid #111111;
   border-radius: 15px;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 70%; /* Could be more or less, depending on screen size */
   max-width: 600px;
-  animation: modalopen 0.5s;
 }
 @keyframes modalopen {
   from {
-    transform: translateY(-500px);
     opacity: 0;
   }
   to {
-    transform: translateY(0px);
     opacity: 1;
   }
 }
@@ -181,14 +178,17 @@ button.how-to-play:hover {
 }
 /* The Close Button */
 .close {
+  position: absolute;
   color: #aaa;
-  float: right;
-  font-size: 28px;
+  aspect-ratio: 1;
+  font-size: 16px;
   font-weight: bold;
-  padding: 5px 15px;
+  padding: 10px 15px;
   border-radius: 25px;
   border: 2px solid #aaa;
   transition: all 300ms;
+  right: 10px;
+  top:10px;
 }
 
 .close:hover,

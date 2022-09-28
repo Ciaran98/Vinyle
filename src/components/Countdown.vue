@@ -1,7 +1,7 @@
 <template>
   <transition>
     <div v-if="loaded">
-      Next Vinyle in:<br /><span>
+      <p>Next Vinyle in:</p><span>
         {{ displayHours }} : {{ displayMinutes }} : {{ displaySeconds }}</span
       >
     </div>
@@ -57,11 +57,14 @@ export default {
 </script>
 <style scoped>
 div > span {
-  font-size: 75px;
+  font-size: 30px;
+}
+p{
+  font-size: 14px;
 }
 @media (max-width: 768px) {
   div > span {
-    font-size: 50px;
+    font-size: 40px;
   }
 }
 </style>

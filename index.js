@@ -24,18 +24,6 @@ const Album = mongoose.model("Album", {
   albumIndex: Number,
 });
 
-// Route to get today's vinyle album
-app.get("/getTodayVinyle", async (req, res) => {
-  let dateToday = new Date().setHours(0, 0, 0, 0);
-  try {
-    const data = await Album.findOne({ runDate: dateToday });
-    res.send({
-      name: data.name,
-    });
-  } catch (err) {
-    console.error(err);
-  }
-});
 // Route to get a vinyle album from a specific date
 app.get("/getVinyleFromDate", async (req, res) => {
   let dateSelected = req.query.time;
@@ -46,7 +34,10 @@ app.get("/getVinyleFromDate", async (req, res) => {
       albumIndex: data.albumIndex,
     });
   } catch (err) {
-    console.error(err);
+    res.send({
+      name: "The Gods We Can Touch",
+      albumIndex:1
+    });
   }
 });
 // Route - Add new album to database

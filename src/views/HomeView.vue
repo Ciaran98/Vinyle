@@ -2,40 +2,39 @@
   <div id="infoModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content" id="contentModal">
-      <span class="close" @click="closeModal">&times;</span>
-      <h1>How To Play</h1>
+      <span class="close" @click="closeModal">X</span>
+      <h1>Vinyle</h1>
       <hr />
-      <h2>Welcome to Vinyle!</h2>
       <p>
-        At the beginning of the game, you are given a pixelated album cover, and
-        you have to guess the name of the album. You need to be careful, you
-        only have 6 guess attempts, or 20 seconds to guess the name of the
-        album. If the timer reaches 0, or you run out of guesses, you lose. If
-        you successfully guess the album, you can share your results!
+        You have 20 seconds, or 6 attempts to correctly guess the album cover.
       </p>
+      <p>
+        Press play button to start the countdown, press pause to stop the
+        countdown, and input your guess using the text box.
+      </p>
+      <p>New games available each day!</p>
+      <hr />
+      <p>Created by Ciarán Melarkey</p>
     </div>
   </div>
-
   <div class="play-buttons">
-    <button class="modal-button how-to-play" @click="openModal">
-      How to play</button
-    ><br />
+    <button class="modal-button how-to-play" @click="openModal">?</button>
     <input
       id="vinyleCalendar"
       type="date"
       min="2022-07-07"
       @change="selectDate($event)"
     />
-    <Vinyle
-      :vinyle-name="this.albumName"
-      :vinyle-game-type="this.gamemodeSelected"
-      :vinyle-completed-today="this.todayCompleted"
-      :vinyle-is-today="this.isToday"
-      :vinyle-todays-album="this.todaysAlbum"
-      :vinyle-game-number="this.gameNumber"
-      @update-completed-today="updateCompleted"
-    />
   </div>
+  <Vinyle
+    :vinyle-name="this.albumName"
+    :vinyle-game-type="this.gamemodeSelected"
+    :vinyle-completed-today="this.todayCompleted"
+    :vinyle-is-today="this.isToday"
+    :vinyle-todays-album="this.todaysAlbum"
+    :vinyle-game-number="this.gameNumber"
+    @update-completed-today="updateCompleted"
+  />
 </template>
 
 <script>
@@ -170,19 +169,25 @@ export default {
 </script>
 
 <style scoped>
+p {
+  text-align: left;
+  line-height: 2;
+}
 .play-anim {
   animation: openmodal 1s linear 0 1 normal forwards;
 }
 .reverse-anim {
   animation: closemodal 1s linear 0 1 normal forwards;
 }
-div.play-buttons > * {
-  margin: 10px;
-}
+
 .modal-button {
-  width: 150px !important;
+  width: 40px !important;
 }
-div.play-buttons {
-  padding-bottom: 60px;
+.play-buttons {
+  max-width: 300px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
