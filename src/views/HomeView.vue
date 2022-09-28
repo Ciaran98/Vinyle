@@ -1,7 +1,7 @@
 <template>
-  <div id="infoModal" class="modal">
+  <div id="infoModal" class="modal" @click="closeModal">
     <!-- Modal content -->
-    <div class="modal-content" id="contentModal">
+    <div class="modal-content" id="contentModal" @click.stop>
       <span class="close" @click="closeModal">X</span>
       <h1>Vinyle</h1>
       <hr />

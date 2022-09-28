@@ -199,4 +199,7 @@ button.how-to-play:hover {
   border-color: red;
   transition: all 300ms;
 }
+hr{
+  border-top: 1px solid white;
+}
 </style>
